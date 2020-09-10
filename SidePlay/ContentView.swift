@@ -7,38 +7,115 @@
 
 import SwiftUI
 import CoreData
+import AVKit
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    
+    @State var showFilePicker = false
+    @State var audioPlayer: AVAudioPlayer?
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Playlist.name, ascending: true)
+        ],
+        predicate: NSPredicate(format: "favorite == %@", "true"),
         animation: .default)
-    private var items: FetchedResults<Item>
+    private var starredPlaylists: FetchedResults<Playlist>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Playlist.name, ascending: true)],
+        animation: .default)
+    private var playlists: FetchedResults<Playlist>
+    
+    var callbackURLs: [URL] = []
 
     var body: some View {
-        List {
-            ForEach(items) { item in
-                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+        NavigationView {
+            VStack {
+                List {
+                    Section(header: PlaylistHeader()) {
+                        ForEach(playlists) { playlist in
+                            NavigationLink(
+                                playlist.name!, destination: PlaylistView(audioPlayer: $audioPlayer, playlist: playlist)
+                                        .environment(\.managedObjectContext, viewContext)
+                            )
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
+                }
+                
+                if starredPlaylists.count > 0 {
+                    Section(header: FavoritePlaylistHeader()) {
+                        List {
+                            ForEach(starredPlaylists) { starredPlaylist in
+                                Text(starredPlaylist.name!)
+                            }
+                            .onDelete(perform: deleteItems)
+                        }
+                    }
+                }
             }
-            .onDelete(perform: deleteItems)
-        }
-        .toolbar {
-            #if os(iOS)
-            EditButton()
-            #endif
-
-            Button(action: addItem) {
-                Label("Add Item", systemImage: "plus")
+            // Nav Bar Config
+            .navigationBarTitle("Library")
+            .navigationBarItems(trailing:
+                Button(action: {
+                    showFilePicker.toggle()
+                }, label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .padding(6)
+                        .frame(width: 24, height: 24)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .foregroundColor(.white)
+                })
+            )
+            // Import Config
+            .sheet(isPresented: $showFilePicker, onDismiss: {
+                self.showFilePicker = false
+            }) {
+                DocumentPicker { (urls) in
+                    addTracks(urls: urls)
+                } onDismiss: {
+                    self.showFilePicker = false
+                }
             }
         }
     }
 
-    private func addItem() {
+    func addTracks(urls: [URL]) {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
+            var counter = 0
+            for url in urls {
+                do {
+                    let trackData = try Data(contentsOf: url)
+                    
+                    var unsortedPlaylist: Playlist
+                    let unsortedPlaylistFetchRequest : NSFetchRequest<Playlist> = Playlist.fetchRequest()
+                    unsortedPlaylistFetchRequest.predicate = NSPredicate(format: "name == %@", "Unsorted")
+                    let fetchedResults = try viewContext.fetch(unsortedPlaylistFetchRequest)
+                    if fetchedResults.count > 0 {
+                        unsortedPlaylist = fetchedResults.first!
+                    } else {
+                        unsortedPlaylist = Playlist(context: viewContext)
+                        unsortedPlaylist.name = "Unsorted"
+                    }
+                    
+                    print(url.lastPathComponent)
+                    let newTrack = Track(context: viewContext)
+                    newTrack.name = url.lastPathComponent
+                    newTrack.playlist = unsortedPlaylist
+                    newTrack.progress = 0
+                    newTrack.sortOrder = Int64(counter)
+                    newTrack.data = trackData
+                    newTrack.isPlaying = false
+                    
+                }
+                catch { print("Error \(error)") }
+                counter += 1
+            }
+            
             do {
                 try viewContext.save()
             } catch {
@@ -50,9 +127,9 @@ struct ContentView: View {
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            offsets.map { playlists[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -66,15 +143,26 @@ struct ContentView: View {
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
+
+struct PlaylistHeader: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "music.note.list")
+            Text("Playlists")
+        }
+    }
+}
+
+struct FavoritePlaylistHeader: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "star")
+            Text("Favorites")
+        }
     }
 }
