@@ -22,6 +22,7 @@ extension Track {
     @NSManaged public var sortOrder: Int64
     @NSManaged public var playlist: Playlist?
     @NSManaged public var isPlaying: Bool
+    @NSManaged public var played: Bool
 
     public var wrappedName: String {
         name ?? "Unknown Track"

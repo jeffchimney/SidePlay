@@ -11,20 +11,39 @@ import AVKit
 struct PlaylistView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State var showFilePicker = false
-    @Binding var audioPlayer: AVAudioPlayer?
+    @Binding var audioHandler: AudioHandler
     
     var playlist: Playlist
     
     var body: some View {
         VStack {
+            NavigationLink(
+                destination: PlayerView(audioHandler: $audioHandler, playlist: playlist),
+                label: {
+                    HStack {
+                        Image(systemName: "play")
+                            .resizable()
+                            .padding(6)
+                            .frame(width: 24, height: 24)
+                            .background(Color.elementColor)
+                            .clipShape(Circle())
+                            .foregroundColor(.white)
+                        Text("Resume")
+                            .foregroundColor(.elementColor)
+                        Spacer()
+                    }
+                    .padding()
+                }
+            )
             List {
                 ForEach(playlist.trackArray) { track in
                     NavigationLink(
-                        track.name!, destination: PlayerView(audioPlayer: $audioPlayer, track: track)
+                        track.name!, destination: PlayerView(audioHandler: $audioHandler, playlist: Playlist(), track: track)
                             .environment(\.managedObjectContext, viewContext)
                     )
                 }
             }
+            .id(UUID())
         }
         // Nav Bar Config
         .navigationBarTitle(playlist.wrappedName)
@@ -36,7 +55,7 @@ struct PlaylistView: View {
                     .resizable()
                     .padding(6)
                     .frame(width: 24, height: 24)
-                    .background(Color.blue)
+                    .background(Color.elementColor)
                     .clipShape(Circle())
                     .foregroundColor(.white)
             })
@@ -68,6 +87,7 @@ struct PlaylistView: View {
                     newTrack.sortOrder = Int64(counter)
                     newTrack.data = trackData
                     newTrack.isPlaying = false
+                    newTrack.played = false
                     
                     playlist.addToTracks(newTrack)
                 }
@@ -89,6 +109,6 @@ struct PlaylistView: View {
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(audioPlayer: .constant(AVAudioPlayer()), playlist: Playlist())
+        PlaylistView(audioHandler: .constant(AudioHandler()), playlist: Playlist())
     }
 }
