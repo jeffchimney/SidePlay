@@ -1,19 +1,15 @@
 //
-//  PlaylistCard.swift
+//  ImportCard.swift
 //  SidePlay
 //
-//  Created by Jeff Chimney on 2020-09-12.
+//  Created by Jeff Chimney on 2020-09-13.
 //
 
 import SwiftUI
 
-struct PlaylistCard: View {
-    @Environment(\.colorScheme) var colorScheme
+struct ImportCard: View {
     
-    var playlist: Playlist
-    var isEditing: Bool = false
-    
-    @State var newPlaylistName: String = ""
+    @State var playlist: String = ""
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -36,19 +32,11 @@ struct PlaylistCard: View {
                 
                 
                 VStack(alignment: .leading) {
-                    if !isEditing {
-                        Text(playlist.wrappedName)
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .lineLimit(2)
-                            .padding(.bottom, 5)
-                            .foregroundColor(.white)
-                        Text("Contains \(playlist.trackArray.count) items".uppercased())
-                            .font(.caption)
-                            .foregroundColor(.white)
-                    } else {
-                        TextField("New Playlist", text: $newPlaylistName)
-                    }
+                    TextField("Playlist", text: $playlist)
+                        .font(.headline)
+                        .lineLimit(2)
+                        .padding(.bottom, 5)
+                        .foregroundColor(.white)
                 }
                 .padding(.horizontal, 5)
  
@@ -60,8 +48,8 @@ struct PlaylistCard: View {
     }
 }
 
-struct PlaylistCard_Previews: PreviewProvider {
+struct ImportCard_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistCard(playlist: Playlist())
+        ImportCard()
     }
 }

@@ -14,7 +14,10 @@ struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State var showFilePicker = false
+    @State var showAddPlayist = false
     @State var audioHandler = AudioHandler()
+    
+    @ObservedObject var downloadHandler = DownloadHandler(isDownloading: false, downloadProgress: 0, downloadTotal: 10)
 
     @FetchRequest(
         sortDescriptors: [
@@ -47,6 +50,10 @@ struct ContentView: View {
                 Color.backgroundColor.ignoresSafeArea()
                 ScrollView {
                     LazyVStack {
+                        if downloadHandler.isDownloading {
+                            ProgressBar(downloadHandler: .constant(downloadHandler))
+                                .padding()
+                        }
                         ForEach(playlists) { playlist in
                             NavigationLink(
                                 destination:
@@ -56,25 +63,41 @@ struct ContentView: View {
                                     PlaylistCard(playlist: playlist)
                                 }
                             )
-                            .padding()
+                            .padding([.leading, .trailing, .bottom])
                         }
+                        if showAddPlayist {
+                            PlaylistCard(playlist: Playlist(), isEditing: true)
+                                .padding([.leading, .trailing, .bottom])
+                        }
+                        Button(action: {
+                            showAddPlayist.toggle()
+                        }, label: {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .padding(6)
+                                .frame(width: 35, height: 35)
+                                .background(Color.elementColor)
+                                .clipShape(Circle())
+                                .foregroundColor(.white)
+                        })
                     }
 //                    .listStyle(PlainListStyle())
                 }
+//                if true {
+//                    Color.gray
+//                    ImportCard()
+//                }
             }
             // Nav Bar Config
-            .navigationBarTitle("Library")
+            .navigationBarTitle("Playlists")
             .navigationBarItems(trailing:
                 Button(action: {
                     showFilePicker.toggle()
                 }, label: {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .padding(6)
-                        .frame(width: 24, height: 24)
-                        .background(Color.elementColor)
-                        .clipShape(Circle())
-                        .foregroundColor(.white)
+                    Image(systemName: "square.and.arrow.down")
+                        //.resizable()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(Color.elementColor)
                 })
             )
             // Import Config
@@ -95,9 +118,18 @@ struct ContentView: View {
     }
 
     func addTracks(urls: [URL]) {
+        let sortedUrls = urls.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+        downloadHandler.set(isDownloading: true)
         withAnimation {
-            for url in urls {
+            print(downloadHandler.isDownloading)
+            
+            downloadHandler.set(downloadTotal: Double(sortedUrls.count))
+            var counter = 1
+            for url in sortedUrls {
                 do {
+                    print(downloadHandler.downloadProgress)
+                    downloadHandler.set(downloadProgress: Double(counter))
+                    downloadHandler.set(percentDownloaded: downloadHandler.downloadProgress / downloadHandler.downloadTotal)
                     let trackData = try Data(contentsOf: url)
                     
                     var unsortedPlaylist: Playlist
@@ -129,6 +161,7 @@ struct ContentView: View {
                     }
                 }
                 catch { print("Error \(error)") }
+                counter += 1
             }
             
             do {
@@ -137,6 +170,8 @@ struct ContentView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+            
+            downloadHandler.set(isDownloading: false)
         }
     }
 
@@ -175,5 +210,32 @@ struct FavoritePlaylistHeader: View {
             Image(systemName: "star")
             Text("Favorites")
         }
+    }
+}
+
+class DownloadHandler: ObservableObject {
+    @Published var isDownloading: Bool
+    @Published var downloadProgress: Double
+    @Published var downloadTotal: Double
+    @Published var percentDownloaded: Double
+    
+    init (isDownloading: Bool, downloadProgress : Double, downloadTotal : Double) {
+        self.isDownloading = isDownloading
+        self.downloadProgress = downloadProgress
+        self.downloadTotal = downloadTotal
+        self.percentDownloaded = downloadProgress / downloadTotal
+    }
+    
+    func set(downloadProgress: Double) {
+        self.downloadProgress = downloadProgress
+    }
+    func set(downloadTotal: Double) {
+        self.downloadTotal = downloadTotal
+    }
+    func set(percentDownloaded: Double) {
+        self.percentDownloaded = percentDownloaded
+    }
+    func set(isDownloading: Bool) {
+        self.isDownloading = isDownloading
     }
 }
