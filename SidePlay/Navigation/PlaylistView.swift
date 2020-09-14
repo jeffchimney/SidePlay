@@ -73,9 +73,10 @@ struct PlaylistView: View {
     }
     
     func addTracksTo(playlist: Playlist, urls: [URL]) {
+        let sortedUrls = urls.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
         withAnimation {
             var counter = 0
-            for url in urls {
+            for url in sortedUrls {
                 do {
                     let trackData = try Data(contentsOf: url)
                     

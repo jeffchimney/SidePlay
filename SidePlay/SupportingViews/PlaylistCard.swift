@@ -15,6 +15,11 @@ struct PlaylistCard: View {
     var isEditing: Bool = false
     
     @State var newPlaylistName: String = ""
+    @State var chosenColor: Color
+    
+    var colors: [Colors] = [
+        Colors(color: Color.blueColor), Colors(color: Color.greenColor), Colors(color: Color.yellowColor), Colors(color: Color.redColor)
+    ]
     
     @Binding var showAddPlayist: Bool
     
@@ -23,7 +28,7 @@ struct PlaylistCard: View {
             if !isEditing {
                 playlist.colorForEnum
             } else {
-                Color.yellowColor
+                chosenColor
             }
 
             HStack {
@@ -91,6 +96,28 @@ struct PlaylistCard: View {
                 .padding(.horizontal, 5)
  
                 Spacer()
+                
+                if isEditing {
+                    VStack(spacing: 2) {
+                        ForEach(self.colors) { color in
+                            if color.color != chosenColor {
+                                Button {
+                                    chosenColor = color.color
+                                } label: {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [color.color, color.color]),
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 25, height: 25)
+                                }
+                            }
+                        }
+                    }
+                }
             }
             .padding(15)
         }
@@ -98,8 +125,13 @@ struct PlaylistCard: View {
     }
 }
 
+struct Colors: Identifiable {
+    var id: UUID = UUID()
+    var color: Color
+}
+
 struct PlaylistCard_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistCard(playlist: Playlist(), showAddPlayist: .constant(true))
+        PlaylistCard(playlist: Playlist(), chosenColor: Color.red, showAddPlayist: .constant(true))
     }
 }

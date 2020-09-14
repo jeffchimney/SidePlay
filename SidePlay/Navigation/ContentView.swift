@@ -23,14 +23,6 @@ struct ContentView: View {
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Playlist.name, ascending: true)
         ],
-        predicate: NSPredicate(format: "favorite == %@", "true"),
-        animation: .default)
-    private var starredPlaylists: FetchedResults<Playlist>
-    
-    @FetchRequest(
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \Playlist.name, ascending: true)
-        ],
         animation: .default)
     private var playlists: FetchedResults<Playlist>
     
@@ -60,14 +52,14 @@ struct ContentView: View {
                                     PlaylistView(audioHandler: $audioHandler, playlist: playlist)
                                         .environment(\.managedObjectContext, viewContext),
                                 label: {
-                                    PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
+                                    PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
                                         .environment(\.managedObjectContext, viewContext)
                                 }
                             )
                             .padding([.leading, .trailing, .bottom])
                         }
                         if showAddPlayist {
-                            PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
+                            PlaylistCard(playlist: Playlist(), isEditing: true, chosenColor: Color.yellowColor, showAddPlayist: $showAddPlayist)
                                 .padding([.leading, .trailing, .bottom])
                         }
                         Button(action: {
@@ -88,12 +80,7 @@ struct ContentView: View {
                             }
                         })
                     }
-//                    .listStyle(PlainListStyle())
                 }
-//                if true {
-//                    Color.gray
-//                    ImportCard()
-//                }
             }
             // Nav Bar Config
             .navigationBarTitle("Playlists")
@@ -157,7 +144,7 @@ struct ContentView: View {
                     newTrack.name = url.lastPathComponent
                     newTrack.playlist = unsortedPlaylist
                     newTrack.progress = 0
-                    newTrack.sortOrder = Int64(0)
+                    newTrack.sortOrder = Int64(counter)
                     newTrack.data = trackData
                     newTrack.isPlaying = false
                     newTrack.played = false
