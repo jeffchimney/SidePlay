@@ -171,11 +171,11 @@
 		BEB74C2B2508797B0035FEC1 /* SidePlay */ = {
 			isa = PBXGroup;
 			children = (
+				BEB74C2C2508797B0035FEC1 /* SidePlayApp.swift */,
 				BE3A80442509D47700C489DD /* CoreDataObjects */,
 				BE9C711F250D2FEB0053FBB7 /* Navigation */,
 				BE9C7120250D30040053FBB7 /* SwiftCoordinators */,
 				BE9C7121250D30310053FBB7 /* SupportingViews */,
-				BEB74C2C2508797B0035FEC1 /* SidePlayApp.swift */,
 				BED752C225096BD900C79F76 /* SidePlay.entitlements */,
 				BEB74C302508797C0035FEC1 /* Assets.xcassets */,
 				BEB74C352508797C0035FEC1 /* Persistence.swift */,

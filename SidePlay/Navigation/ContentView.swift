@@ -15,7 +15,7 @@ struct ContentView: View {
     
     @State var showFilePicker = false
     @State var showAddPlayist = false
-    @State var audioHandler = AudioHandler()
+    @Binding var audioHandler: AudioHandler
     
     @ObservedObject var downloadHandler = DownloadHandler(isDownloading: false, downloadProgress: 0, downloadTotal: 10)
 
@@ -28,12 +28,14 @@ struct ContentView: View {
     
     var callbackURLs: [URL] = []
     
-    init() {
+    init(audioHandler: Binding<AudioHandler>) {
         UITableView.appearance().backgroundColor = .backgroundColor
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
 
             //Use this if NavigationBarTitle is with displayMode = .inline
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.elementColor]
+        
+        self._audioHandler = audioHandler
     }
 
     var body: some View {
@@ -54,6 +56,7 @@ struct ContentView: View {
                                 label: {
                                     PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
                                         .environment(\.managedObjectContext, viewContext)
+                                        .animation(nil)
                                 }
                             )
                             .padding([.leading, .trailing, .bottom])
@@ -61,6 +64,7 @@ struct ContentView: View {
                         if showAddPlayist {
                             PlaylistCard(playlist: Playlist(), isEditing: true, chosenColor: Color.yellowColor, showAddPlayist: $showAddPlayist)
                                 .padding([.leading, .trailing, .bottom])
+                                .animation(nil)
                         }
                         Button(action: {
                             showAddPlayist.toggle()
@@ -82,6 +86,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .animation(.easeInOut)
             // Nav Bar Config
             .navigationBarTitle("Playlists")
             .navigationBarItems(trailing:
@@ -187,7 +192,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView(audioHandler: .constant(AudioHandler())).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 

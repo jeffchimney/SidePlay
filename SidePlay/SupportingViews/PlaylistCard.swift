@@ -73,7 +73,17 @@ struct PlaylistCard: View {
                             onCommit: {
                                 let newPlaylist = Playlist(context: viewContext)
                                 newPlaylist.name = newPlaylistName
-                                newPlaylist.color = ColorEnum.yellow.rawValue
+                                if chosenColor == .redColor {
+                                    newPlaylist.color = ColorEnum.red.rawValue
+                                } else if chosenColor == .yellowColor {
+                                    newPlaylist.color = ColorEnum.yellow.rawValue
+                                } else if chosenColor == .greenColor {
+                                    newPlaylist.color = ColorEnum.green.rawValue
+                                } else if chosenColor == .blueColor {
+                                    newPlaylist.color = ColorEnum.blue.rawValue
+                                } else {
+                                    newPlaylist.color = ColorEnum.red.rawValue
+                                }
                                 newPlaylist.image = UIImage(systemName: "photo")!.pngData()
                                 newPlaylist.favorite = false
                                 
@@ -91,33 +101,30 @@ struct PlaylistCard: View {
                         .autocapitalization(UITextAutocapitalizationType.words)
                         .padding(.bottom, 5)
 
-                    }
-                }
-                .padding(.horizontal, 5)
- 
-                Spacer()
-                
-                if isEditing {
-                    VStack(spacing: 2) {
-                        ForEach(self.colors) { color in
-                            if color.color != chosenColor {
-                                Button {
-                                    chosenColor = color.color
-                                } label: {
-                                    Circle()
-                                        .fill(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [color.color, color.color]),
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
+                        HStack(spacing: 2) {
+                            ForEach(self.colors) { color in
+                                if color.color != chosenColor {
+                                    Button {
+                                        chosenColor = color.color
+                                    } label: {
+                                        Circle()
+                                            .fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [color.color, color.color]),
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
                                             )
-                                        )
-                                        .frame(width: 25, height: 25)
+                                            .frame(width: 25, height: 25)
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                .padding(.horizontal, 5)
+ 
+                Spacer()
             }
             .padding(15)
         }
