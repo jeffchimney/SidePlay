@@ -60,25 +60,32 @@ struct ContentView: View {
                                     PlaylistView(audioHandler: $audioHandler, playlist: playlist)
                                         .environment(\.managedObjectContext, viewContext),
                                 label: {
-                                    PlaylistCard(playlist: playlist)
+                                    PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
+                                        .environment(\.managedObjectContext, viewContext)
                                 }
                             )
                             .padding([.leading, .trailing, .bottom])
                         }
                         if showAddPlayist {
-                            PlaylistCard(playlist: Playlist(), isEditing: true)
+                            PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
                                 .padding([.leading, .trailing, .bottom])
                         }
                         Button(action: {
                             showAddPlayist.toggle()
                         }, label: {
-                            Image(systemName: "plus")
-                                .resizable()
-                                .padding(6)
-                                .frame(width: 35, height: 35)
-                                .background(Color.elementColor)
-                                .clipShape(Circle())
-                                .foregroundColor(.white)
+                            if showAddPlayist {
+                                Image(systemName: "minus.circle.fill")
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                                    .background(Color.white)
+                                    .foregroundColor(.elementColor)
+                            } else {
+                                Image(systemName: "plus.circle.fill")
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                                    .background(Color.white)
+                                    .foregroundColor(.elementColor)
+                            }
                         })
                     }
 //                    .listStyle(PlainListStyle())
@@ -141,6 +148,8 @@ struct ContentView: View {
                     } else {
                         unsortedPlaylist = Playlist(context: viewContext)
                         unsortedPlaylist.name = "Unsorted"
+                        unsortedPlaylist.color = ColorEnum.red.rawValue
+                        unsortedPlaylist.image = UIImage(systemName: "arrow.2.squarepath")?.pngData()
                     }
                     
                     print(url.lastPathComponent)

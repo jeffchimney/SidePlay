@@ -7,21 +7,44 @@
 //
 
 import Foundation
+import UIKit
+import SwiftUI
 import CoreData
 
 
 extension Playlist {
-
+    
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Playlist> {
         return NSFetchRequest<Playlist>(entityName: "Playlist")
     }
 
     @NSManaged public var name: String?
     @NSManaged public var favorite: Bool
+    @NSManaged public var color: Int64
+    @NSManaged public var image: Data?
     @NSManaged public var tracks: NSSet?
 
     public var wrappedName: String {
         name ?? "Unknown Track"
+    }
+    
+    public var colorForEnum: Color {
+        switch color {
+        case 0:
+            return Color.blueColor
+        case 1:
+            return Color.greenColor
+        case 2:
+            return Color.yellowColor
+        case 3:
+            return Color.redColor
+        default:
+            return Color.redColor
+        }
+    }
+    
+    public var wrappedImage: Data {
+        image ?? UIImage(systemName: "photo")?.pngData() ?? Data()
     }
     
     public var trackArray: [Track] {
