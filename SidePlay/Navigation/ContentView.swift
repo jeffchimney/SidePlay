@@ -16,6 +16,7 @@ struct ContentView: View {
     @State var showFilePicker = false
     @State var showAddPlayist = false
     @Binding var audioHandler: AudioHandler
+    @Binding var isPlaying: Bool
     
     @ObservedObject var downloadHandler = DownloadHandler(isDownloading: false, downloadProgress: 0, downloadTotal: 10)
 
@@ -28,7 +29,7 @@ struct ContentView: View {
     
     var callbackURLs: [URL] = []
     
-    init(audioHandler: Binding<AudioHandler>) {
+    init(audioHandler: Binding<AudioHandler>, isPlaying: Binding<Bool>) {
         UITableView.appearance().backgroundColor = .backgroundColor
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
 
@@ -36,6 +37,7 @@ struct ContentView: View {
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.elementColor]
         
         self._audioHandler = audioHandler
+        self._isPlaying = isPlaying
     }
 
     var body: some View {
@@ -51,7 +53,7 @@ struct ContentView: View {
                         ForEach(playlists) { playlist in
                             NavigationLink(
                                 destination:
-                                    PlaylistView(audioHandler: $audioHandler, playlist: playlist)
+                                    PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
                                         .environment(\.managedObjectContext, viewContext),
                                 label: {
                                     PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
@@ -73,13 +75,13 @@ struct ContentView: View {
                                 Image(systemName: "minus.circle.fill")
                                     .resizable()
                                     .frame(width: 35, height: 35)
-                                    .background(Color.white)
+                                    .background(Color.backgroundColor)
                                     .foregroundColor(.elementColor)
                             } else {
                                 Image(systemName: "plus.circle.fill")
                                     .resizable()
                                     .frame(width: 35, height: 35)
-                                    .background(Color.white)
+                                    .background(Color.backgroundColor)
                                     .foregroundColor(.elementColor)
                             }
                         })
@@ -192,7 +194,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(audioHandler: .constant(AudioHandler())).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView(audioHandler: .constant(AudioHandler()), isPlaying: .constant(false)).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 

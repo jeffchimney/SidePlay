@@ -96,10 +96,10 @@ struct PlaylistCard: View {
                                 
                                 showAddPlayist = false
                             }
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .autocapitalization(UITextAutocapitalizationType.words)
-                        .padding(.bottom, 5)
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .autocapitalization(UITextAutocapitalizationType.words)
+                            .padding(.bottom, 5)
 
                         HStack(spacing: 2) {
                             ForEach(self.colors) { color in

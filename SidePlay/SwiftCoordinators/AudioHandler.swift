@@ -5,19 +5,12 @@ import CoreData
 
 class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
-    @Published var isPlaying: Bool = false {
-        willSet {
-            if newValue == true {
-                playNextTrackInPlaylist()
-            }
-        }
-    }
+    @Published var isPlaying: Bool = false
     @Published var currentlyPlayingTrack: Track?
 
     var audioPlayer = AVAudioPlayer()
     var fileName = ""
     var playlist: Playlist?
-    var track: Track?
     var viewContext: NSManagedObjectContext?
 
     override init() {
@@ -51,7 +44,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     func playFromWhereWeLeftOff() {
         if let unwrappedPlaylist = playlist {
-            for track in unwrappedPlaylist.trackArray.sorted(by: { $0.wrappedName < $1.wrappedName }) {
+            for track in unwrappedPlaylist.trackArray.sorted(by: { $0.sortOrder < $1.sortOrder }) {
                 // if we are caught up to the track we just played, and it hasnt yet been played
                 if track.played == false {
                     do {
@@ -101,11 +94,30 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             }
         }
     }
+    
+    func play() {
+        audioPlayer.play()
+    }
+    
+    func pause() {
+        audioPlayer.pause()
+        currentlyPlayingTrack?.progress = audioPlayer.currentTime.magnitude
+        
+        do {
+            try viewContext!.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("Did finish Playing")
         currentlyPlayingTrack!.played = true
         playNextTrackInPlaylist()
+        
         
         do {
             try viewContext!.save()

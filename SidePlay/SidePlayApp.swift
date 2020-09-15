@@ -19,22 +19,33 @@ struct SidePlayApp: App {
     let persistenceController = PersistenceController.shared
 
     @State var audioHandler = AudioHandler()
+    @State var isPlaying: Bool = false
     
     var body: some Scene {
         WindowGroup {
             ZStack {
-                ContentView(audioHandler: $audioHandler)
+                ContentView(audioHandler: $audioHandler, isPlaying: $isPlaying)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .zIndex(0)
                 
-                VStack {
-                    Spacer()
-                    PlayerView(audioHandler: $audioHandler)
-                        .frame(width: UIScreen.main.bounds.size.width, height: 100)
-                        .background(RoundedCorners(color: .white, tl: 15, tr: 15, bl: 0, br: 0))
-                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                if isPlaying {
+                    VStack {
+                        Spacer()
+                        PlayerView(audioHandler: $audioHandler, isPlaying: isPlaying)
+                            .frame(width: UIScreen.main.bounds.size.width, height: 100)
+                            .background(RoundedCorners(color: .backgroundColor, tl: 25, tr: 25, bl: 0, br: 0))
+                            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                            .shadow(radius: 0)
+                    }
+                    .shadow(radius: 2)
+                    .edgesIgnoringSafeArea(.all)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut(duration: 1))
+                    .zIndex(1)
                 }
-                .shadow(radius: 5)
-                .edgesIgnoringSafeArea(.all)
+            }
+            .onAppear {
+                audioHandler.viewContext = persistenceController.container.viewContext
             }
         }
     }
