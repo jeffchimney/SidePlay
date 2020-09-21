@@ -37,7 +37,7 @@ struct SidePlayApp: App {
                     }
                     //.edgesIgnoringSafeArea(.all)
                     .transition(.move(edge: .bottom))
-                    .animation(.easeInOut(duration: 1))
+                    .animation(.easeInOut)
                 }
             }
             .onAppear {

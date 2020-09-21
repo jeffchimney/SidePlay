@@ -30,6 +30,7 @@
 		BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */; };
 		BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */; };
 		BED752C525096BE800C79F76 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
+		BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE3D1FD251946640040D8F7 /* TrackListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		BED752C225096BD900C79F76 /* SidePlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlay.entitlements; sourceTree = "<group>"; };
 		BED752C425096BE800C79F76 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		BEE3D1FD251946640040D8F7 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 				BE0FE129250DC12D00C9B7D8 /* DownloadingView.swift */,
 				BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */,
 				BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */,
+				BEE3D1FD251946640040D8F7 /* TrackListView.swift */,
 			);
 			path = SupportingViews;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				BE3A80432509D1D900C489DD /* PlaylistView.swift in Sources */,
 				BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */,
 				BEB74C392508797C0035FEC1 /* SidePlay.xcdatamodeld in Sources */,
+				BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */,
 				BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */,
 				BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */,
 				BE3A804B2509D4C700C489DD /* Track+CoreDataClass.swift in Sources */,

@@ -25,9 +25,14 @@ struct FullPlayerView: View {
         VStack {
             Text(track?.wrappedName ?? audioHandler.currentlyPlayingTrack?.wrappedName ?? "Uknown Track")
                 .font(Font.system(.headline))
+                .foregroundColor(Color.elementColor)
                 .padding()
             
             Spacer()
+            
+            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, seekPosition: $seekPosition, audioHandler: $audioHandler)
+                .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
+//                .clipShape(RoundedRectangle(cornerRadius: 15))
             
             Slider(value: $seekPosition, in: 0...1) { (test) in
                 audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
@@ -54,17 +59,25 @@ struct FullPlayerView: View {
             HStack {
                 if elapsedTime%60 < 10 {
                     Text("\(elapsedTime/60):0\(elapsedTime%60)")
+                        .font(Font.system(.caption))
+                        .foregroundColor(Color.elementColor)
                         .padding(.leading)
                 } else {
                     Text("\(elapsedTime/60):\(elapsedTime%60)")
+                        .font(Font.system(.caption))
+                        .foregroundColor(Color.elementColor)
                         .padding(.leading)
                 }
                 Spacer()
                 if runtime%60 < 10 {
                     Text("\(runtime/60):0\(runtime%60)")
+                        .font(Font.system(.caption))
+                        .foregroundColor(Color.elementColor)
                         .padding(.trailing)
                 } else {
                     Text("\(runtime/60):\(runtime%60)")
+                        .font(Font.system(.caption))
+                        .foregroundColor(Color.elementColor)
                         .padding(.trailing)
                 }
             }
