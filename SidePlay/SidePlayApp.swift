@@ -23,25 +23,21 @@ struct SidePlayApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
+            VStack {
                 ContentView(audioHandler: $audioHandler, isPlaying: $isPlaying)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .zIndex(0)
                 
                 if isPlaying {
                     VStack {
-                        Spacer()
+                        Divider()
                         PlayerView(audioHandler: $audioHandler, isPlaying: isPlaying)
-                            .frame(width: UIScreen.main.bounds.size.width, height: 100)
-                            .background(RoundedCorners(color: .backgroundColor, tl: 25, tr: 25, bl: 0, br: 0))
+                            .frame(width: UIScreen.main.bounds.size.width, height: 75)
+                            //.background(RoundedCorners(color: .backgroundColor, tl: 25, tr: 25, bl: 0, br: 0))
                             .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                            .shadow(radius: 0)
                     }
-                    .shadow(radius: 2)
-                    .edgesIgnoringSafeArea(.all)
+                    //.edgesIgnoringSafeArea(.all)
                     .transition(.move(edge: .bottom))
                     .animation(.easeInOut(duration: 1))
-                    .zIndex(1)
                 }
             }
             .onAppear {

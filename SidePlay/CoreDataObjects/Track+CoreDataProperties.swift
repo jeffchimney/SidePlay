@@ -16,7 +16,7 @@ extension Track {
         return NSFetchRequest<Track>(entityName: "Track")
     }
 
-    @NSManaged public var data: Data?
+    @NSManaged public var url: URL?
     @NSManaged public var name: String?
     @NSManaged public var progress: Double
     @NSManaged public var sortOrder: Int64
@@ -28,8 +28,8 @@ extension Track {
         name ?? "Unknown Track"
     }
     
-    public var wrappedData: Data {
-        data ?? Data()
+    public var wrappedURL: URL {
+        url ?? URL(fileURLWithPath: "")
     }
 }
 

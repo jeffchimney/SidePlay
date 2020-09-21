@@ -30,7 +30,7 @@ struct ContentView: View {
     var callbackURLs: [URL] = []
     
     init(audioHandler: Binding<AudioHandler>, isPlaying: Binding<Bool>) {
-        UITableView.appearance().backgroundColor = .backgroundColor
+        //UITableView.appearance().backgroundColor = .backgroundColor
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
 
             //Use this if NavigationBarTitle is with displayMode = .inline
@@ -42,50 +42,50 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            ZStack(alignment: .leading) {
-                Color.backgroundColor.ignoresSafeArea()
-                ScrollView {
-                    LazyVStack {
-                        if downloadHandler.isDownloading {
-                            ProgressBar(downloadHandler: .constant(downloadHandler))
-                                .padding()
-                        }
-                        ForEach(playlists) { playlist in
-                            NavigationLink(
-                                destination:
-                                    PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
-                                        .environment(\.managedObjectContext, viewContext),
-                                label: {
-                                    PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
-                                        .environment(\.managedObjectContext, viewContext)
-                                        .animation(nil)
-                                }
-                            )
-                            .padding([.leading, .trailing, .bottom])
-                        }
-                        if showAddPlayist {
-                            PlaylistCard(playlist: Playlist(), isEditing: true, chosenColor: Color.yellowColor, showAddPlayist: $showAddPlayist)
-                                .padding([.leading, .trailing, .bottom])
-                                .animation(nil)
-                        }
-                        Button(action: {
-                            showAddPlayist.toggle()
-                        }, label: {
-                            if showAddPlayist {
-                                Image(systemName: "minus.circle.fill")
-                                    .resizable()
-                                    .frame(width: 35, height: 35)
-                                    .background(Color.backgroundColor)
-                                    .foregroundColor(.elementColor)
-                            } else {
-                                Image(systemName: "plus.circle.fill")
-                                    .resizable()
-                                    .frame(width: 35, height: 35)
-                                    .background(Color.backgroundColor)
-                                    .foregroundColor(.elementColor)
-                            }
-                        })
+            VStack {
+                List {
+                    if downloadHandler.isDownloading {
+                        ProgressBar(downloadHandler: .constant(downloadHandler))
+                            .padding()
                     }
+                    ForEach(playlists) { playlist in
+                        NavigationLink(
+                            destination:
+                                PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
+                                    .environment(\.managedObjectContext, viewContext),
+                            label: {
+                                PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
+                                    .environment(\.managedObjectContext, viewContext)
+                                    //.animation(nil)
+                            }
+                        )
+                    }
+                    if showAddPlayist {
+                        PlaylistCard(playlist: Playlist(), isEditing: true, chosenColor: Color.yellowColor, showAddPlayist: $showAddPlayist)
+                            //.animation(nil)
+                    }
+                }
+                .listStyle(PlainListStyle())
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showAddPlayist.toggle()
+                    }, label: {
+                        if showAddPlayist {
+                            Image(systemName: "minus.circle.fill")
+                                .resizable()
+                                .frame(width: 35, height: 35)
+                                .background(Color.backgroundColor)
+                                .foregroundColor(.elementColor)
+                        } else {
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 35, height: 35)
+                                .background(Color.backgroundColor)
+                                .foregroundColor(.elementColor)
+                        }
+                    })
+                    Spacer()
                 }
             }
             .animation(.easeInOut)
@@ -131,7 +131,21 @@ struct ContentView: View {
                     print(downloadHandler.downloadProgress)
                     downloadHandler.set(downloadProgress: Double(counter))
                     downloadHandler.set(percentDownloaded: downloadHandler.downloadProgress / downloadHandler.downloadTotal)
-                    let trackData = try Data(contentsOf: url)
+
+                    // then lets create your document folder url
+                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+                    // lets create your destination file url
+                    let destinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString)
+                    print(destinationUrl)
+
+                    do {
+                        // after downloading your file you need to move it to your destination url
+                        try FileManager.default.moveItem(at: url, to: destinationUrl)
+                        print("File moved to documents folder")
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
                     
                     var unsortedPlaylist: Playlist
                     let unsortedPlaylistFetchRequest : NSFetchRequest<Playlist> = Playlist.fetchRequest()
@@ -146,13 +160,14 @@ struct ContentView: View {
                         unsortedPlaylist.image = UIImage(systemName: "arrow.2.squarepath")?.pngData()
                     }
                     
-                    print(url.lastPathComponent)
+                    print(destinationUrl)
                     let newTrack = Track(context: viewContext)
                     newTrack.name = url.lastPathComponent
                     newTrack.playlist = unsortedPlaylist
                     newTrack.progress = 0
                     newTrack.sortOrder = Int64(counter)
-                    newTrack.data = trackData
+                    // could repoint url to local url if the track has been downloaded
+                    newTrack.url = destinationUrl
                     newTrack.isPlaying = false
                     newTrack.played = false
                     
@@ -165,13 +180,6 @@ struct ContentView: View {
                 }
                 catch { print("Error \(error)") }
                 counter += 1
-            }
-            
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
             
             downloadHandler.set(isDownloading: false)

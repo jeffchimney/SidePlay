@@ -25,15 +25,9 @@ struct PlaylistCard: View {
     
     var body: some View {
         ZStack(alignment: .leading) {
-            if !isEditing {
-                playlist.colorForEnum
-            } else {
-                chosenColor
-            }
-
             HStack {
                 ZStack {
-                    Circle()
+                    RoundedRectangle(cornerRadius: 15)
                         .fill(
                             LinearGradient(
                                 gradient: Gradient(colors: [.white, .white]),
@@ -54,8 +48,7 @@ struct PlaylistCard: View {
                             .frame(width: 25, height: 25, alignment: .center)
                     }
                 }
-                .frame(width: 70, height: 70, alignment: .center)
-                
+                .frame(width: 60, height: 60, alignment: .center)
                 
                 VStack(alignment: .leading) {
                     if !isEditing {
@@ -64,10 +57,10 @@ struct PlaylistCard: View {
                             .fontWeight(.bold)
                             .lineLimit(2)
                             .padding(.bottom, 5)
-                            .foregroundColor(.white)
+                            .foregroundColor(isEditing ? chosenColor : playlist.colorForEnum)
                         Text("Contains \(playlist.trackArray.count) items".uppercased())
                             .font(.caption)
-                            .foregroundColor(.white)
+                            .foregroundColor(.elementColor)
                     } else {                        
                         TextField("New Playlist", text: $newPlaylistName) { (result) in }
                             onCommit: {
@@ -87,16 +80,16 @@ struct PlaylistCard: View {
                                 newPlaylist.image = UIImage(systemName: "photo")!.pngData()
                                 newPlaylist.favorite = false
                                 
+                                self.showAddPlayist = false
+                                
                                 do {
                                     try viewContext.save()
                                 } catch {
                                     let nsError = error as NSError
                                     fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                                 }
-                                
-                                showAddPlayist = false
                             }
-                            .foregroundColor(.white)
+                            .foregroundColor(isEditing ? chosenColor : playlist.colorForEnum)
                             .font(.headline)
                             .autocapitalization(UITextAutocapitalizationType.words)
                             .padding(.bottom, 5)
@@ -126,9 +119,7 @@ struct PlaylistCard: View {
  
                 Spacer()
             }
-            .padding(15)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
 

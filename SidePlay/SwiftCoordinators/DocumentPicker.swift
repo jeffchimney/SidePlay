@@ -25,7 +25,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
     }
 
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let controller = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.mp3], asCopy: true)
+        let controller = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.mp3, UTType.audio], asCopy: true)
         controller.allowsMultipleSelection = true
         controller.delegate = context.coordinator
         return controller

@@ -28,6 +28,7 @@
 		BEB74C442508797C0035FEC1 /* SidePlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C432508797C0035FEC1 /* SidePlayTests.swift */; };
 		BEB74C4F2508797C0035FEC1 /* SidePlayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C4E2508797C0035FEC1 /* SidePlayUITests.swift */; };
 		BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */; };
+		BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */; };
 		BED752C525096BE800C79F76 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 		BEB74C4E2508797C0035FEC1 /* SidePlayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePlayUITests.swift; sourceTree = "<group>"; };
 		BEB74C502508797C0035FEC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		BED752C225096BD900C79F76 /* SidePlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlay.entitlements; sourceTree = "<group>"; };
 		BED752C425096BE800C79F76 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 				BEB74C2E2508797B0035FEC1 /* ContentView.swift */,
 				BE3A80422509D1D900C489DD /* PlaylistView.swift */,
 				BE3A804D2509D96500C489DD /* PlayerView.swift */,
+				BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */,
 				BEB74C392508797C0035FEC1 /* SidePlay.xcdatamodeld in Sources */,
 				BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */,
+				BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */,
 				BE3A804B2509D4C700C489DD /* Track+CoreDataClass.swift in Sources */,
 				BE3A804E2509D96500C489DD /* PlayerView.swift in Sources */,
 				BE3A804C2509D4C700C489DD /* Track+CoreDataProperties.swift in Sources */,

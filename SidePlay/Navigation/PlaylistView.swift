@@ -88,32 +88,42 @@ struct PlaylistView: View {
         withAnimation {
             var counter = 0
             for url in sortedUrls {
+                // then lets create your document folder url
+                let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+                // lets create your destination file url
+                let destinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString)
+                print(destinationUrl)
+
                 do {
-                    let trackData = try Data(contentsOf: url)
-                    
-                    print(url.lastPathComponent)
-                    let newTrack = Track(context: viewContext)
-                    newTrack.name = url.lastPathComponent
-                    newTrack.playlist = playlist
-                    newTrack.progress = 0
-                    newTrack.sortOrder = Int64(counter)
-                    newTrack.data = trackData
-                    newTrack.isPlaying = false
-                    newTrack.played = false
-                    
-                    playlist.addToTracks(newTrack)
+                    // after downloading your file you need to move it to your destination url
+                    try FileManager.default.moveItem(at: url, to: destinationUrl)
+                    print("File moved to documents folder")
+                } catch let error as NSError {
+                    print(error.localizedDescription)
                 }
-                catch { print("Error \(error)") }
+                
+                print(destinationUrl)
+                let newTrack = Track(context: viewContext)
+                newTrack.name = url.lastPathComponent
+                newTrack.playlist = playlist
+                newTrack.progress = 0
+                newTrack.sortOrder = Int64(counter)
+                newTrack.url = destinationUrl
+                newTrack.isPlaying = false
+                newTrack.played = false
+                
+                playlist.addToTracks(newTrack)
                 counter += 1
-            }
-            
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                
+                do {
+                    try viewContext.save()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nsError = error as NSError
+                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                }
             }
         }
     }

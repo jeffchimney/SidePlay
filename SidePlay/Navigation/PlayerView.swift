@@ -14,6 +14,7 @@ struct PlayerView: View {
     
     @State var isPlaying: Bool
     @State var seekPosition: Double = 0
+    @State var showFullPlayer: Bool = false
     
     var playlist: Playlist?
     var track: Track?
@@ -57,6 +58,15 @@ struct PlayerView: View {
                     }
                 }
             }
+        }
+        .onTapGesture {
+            self.showFullPlayer.toggle()
+        }
+        .sheet(isPresented: $showFullPlayer, onDismiss: {
+            self.showFullPlayer = false
+        }) {
+            FullPlayerView(audioHandler: $audioHandler, isPlaying: $isPlaying)
+                .environment(\.managedObjectContext, viewContext)
         }
         .navigationBarTitle("Now Playing")
     }
