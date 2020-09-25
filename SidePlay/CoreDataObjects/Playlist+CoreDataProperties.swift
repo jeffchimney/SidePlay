@@ -23,6 +23,8 @@ extension Playlist {
     @NSManaged public var color: Int64
     @NSManaged public var image: Data?
     @NSManaged public var tracks: NSSet?
+    @NSManaged public var lastPlayed: Date?
+    @NSManaged public var lastPlayedTrack: UUID?
 
     public var wrappedName: String {
         name ?? "Unknown Track"

@@ -16,6 +16,7 @@ extension Track {
         return NSFetchRequest<Track>(entityName: "Track")
     }
 
+    @NSManaged public var uuid: UUID
     @NSManaged public var url: URL?
     @NSManaged public var name: String?
     @NSManaged public var progress: Double

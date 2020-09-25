@@ -19,6 +19,7 @@
 		BE3A80502509DBBD00C489DD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A804F2509DBBD00C489DD /* Extensions.swift */; };
 		BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ECD3B250C146900B3E618 /* AudioHandler.swift */; };
 		BE9C711E250D2B0A0053FBB7 /* PlaylistCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */; };
+		BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */; };
 		BEB74C2D2508797B0035FEC1 /* SidePlayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C2C2508797B0035FEC1 /* SidePlayApp.swift */; };
 		BEB74C2F2508797B0035FEC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C2E2508797B0035FEC1 /* ContentView.swift */; };
 		BEB74C312508797C0035FEC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEB74C302508797C0035FEC1 /* Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */; };
 		BED752C525096BE800C79F76 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
 		BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE3D1FD251946640040D8F7 /* TrackListView.swift */; };
+		BEE3D2002519AB8E0040D8F7 /* TrackListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE3D1FF2519AB8D0040D8F7 /* TrackListRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,7 @@
 		BE3A804F2509DBBD00C489DD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BE7ECD3B250C146900B3E618 /* AudioHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHandler.swift; sourceTree = "<group>"; };
 		BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCard.swift; sourceTree = "<group>"; };
+		BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyPlayedCard.swift; sourceTree = "<group>"; };
 		BEB74C292508797B0035FEC1 /* SidePlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SidePlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEB74C2C2508797B0035FEC1 /* SidePlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePlayApp.swift; sourceTree = "<group>"; };
 		BEB74C2E2508797B0035FEC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 		BED752C225096BD900C79F76 /* SidePlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlay.entitlements; sourceTree = "<group>"; };
 		BED752C425096BE800C79F76 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		BEE3D1FD251946640040D8F7 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
+		BEE3D1FF2519AB8D0040D8F7 /* TrackListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,8 @@
 				BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */,
 				BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */,
 				BEE3D1FD251946640040D8F7 /* TrackListView.swift */,
+				BEE3D1FF2519AB8D0040D8F7 /* TrackListRowView.swift */,
+				BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */,
 			);
 			path = SupportingViews;
 			sourceTree = "<group>";
@@ -371,8 +377,10 @@
 				BE3A80502509DBBD00C489DD /* Extensions.swift in Sources */,
 				BE9C711E250D2B0A0053FBB7 /* PlaylistCard.swift in Sources */,
 				BEB74C362508797C0035FEC1 /* Persistence.swift in Sources */,
+				BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */,
 				BE0FE12A250DC12D00C9B7D8 /* DownloadingView.swift in Sources */,
 				BEB74C2F2508797B0035FEC1 /* ContentView.swift in Sources */,
+				BEE3D2002519AB8E0040D8F7 /* TrackListRowView.swift in Sources */,
 				BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */,
 				BEB74C2D2508797B0035FEC1 /* SidePlayApp.swift in Sources */,
 			);

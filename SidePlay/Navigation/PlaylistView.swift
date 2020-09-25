@@ -30,11 +30,11 @@ struct PlaylistView: View {
                         .resizable()
                         .padding(6)
                         .frame(width: 24, height: 24)
-                        .background(Color.elementColor)
+                        //.background(Color.elementColor)
                         .clipShape(Circle())
-                        .foregroundColor(.white)
+                        //.foregroundColor(.white)
                     Text("Resume")
-                        .foregroundColor(.elementColor)
+                        //.foregroundColor(.elementColor)
                     Spacer()
                 }
                 .padding()
@@ -66,9 +66,9 @@ struct PlaylistView: View {
                     .resizable()
                     .padding(6)
                     .frame(width: 24, height: 24)
-                    .background(Color.elementColor)
+                    //.background(Color.elementColor)
                     .clipShape(Circle())
-                    .foregroundColor(.white)
+                    //.foregroundColor(.white)
             })
         )
         // Import Config
@@ -112,6 +112,7 @@ struct PlaylistView: View {
                 newTrack.url = destinationUrl
                 newTrack.isPlaying = false
                 newTrack.played = false
+                newTrack.uuid = UUID()
                 
                 playlist.addToTracks(newTrack)
                 counter += 1

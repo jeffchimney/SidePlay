@@ -30,9 +30,9 @@ struct FullPlayerView: View {
             
             Spacer()
             
-            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, seekPosition: $seekPosition, audioHandler: $audioHandler)
+            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, audioHandler: $audioHandler)
                 .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
-//                .clipShape(RoundedRectangle(cornerRadius: 15))
+                //.clipShape(RoundedRectangle(cornerRadius: 15))
             
             Slider(value: $seekPosition, in: 0...1) { (test) in
                 audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
@@ -43,6 +43,8 @@ struct FullPlayerView: View {
                     seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
 
                     audioHandler.currentlyPlayingTrack?.progress = audioHandler.audioPlayer.currentTime.magnitude
+                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayed = Date()
+                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayedTrack = audioHandler.currentlyPlayingTrack!.uuid
                     
                     elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
                     runtime = Int(audioHandler.audioPlayer.duration.magnitude)

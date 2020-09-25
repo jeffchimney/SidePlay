@@ -11,7 +11,8 @@ struct TrackListView: View {
     
     var playlist: Playlist
     
-    @Binding var seekPosition: Double
+    @State var counter: Int = 1
+    
     @Binding var audioHandler: AudioHandler
     
     var body: some View {
@@ -21,22 +22,36 @@ struct TrackListView: View {
                     Button {
                         audioHandler.playTrack(track: track)
                     } label: {
-                        Text(track.name!)
+                        ZStack {
+                            if track.objectID == audioHandler.currentlyPlayingTrack!.objectID {
+                                track.playlist!.colorForEnum
+                            }
+                            makeRowView(track: track)
+                                .padding(5)
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
                     }
-                    .padding(.all, 5)
+                    .padding([.leading, .trailing], 5)
                     .foregroundColor(Color.elementColor)
                     Divider()
                 }
             }
+            .padding()
         }
         .id(UUID())
         .background(Color.secondaryColor)
+        .clipShape(RoundedRectangle(cornerRadius: 15))
         .padding()
+    }
+
+    func makeRowView(track: Track) -> TrackListRowView {
+        self.counter += 1
+        return TrackListRowView(track: track, trackNumber: counter, nowPlayingTrackID: audioHandler.currentlyPlayingTrack!.objectID)
     }
 }
 
 struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackListView(playlist: Playlist(), seekPosition: .constant(0), audioHandler: .constant(AudioHandler()))
+        TrackListView(playlist: Playlist(), audioHandler: .constant(AudioHandler()))
     }
 }

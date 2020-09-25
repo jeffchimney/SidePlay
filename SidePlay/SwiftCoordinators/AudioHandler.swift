@@ -54,17 +54,29 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     func playFromWhereWeLeftOff() {
         if let unwrappedPlaylist = playlist {
-            for track in unwrappedPlaylist.trackArray.sorted(by: { $0.sortOrder < $1.sortOrder }) {
+            let sortedPlaylist = unwrappedPlaylist.trackArray.sorted(by: { $0.sortOrder < $1.sortOrder })
+            for track in sortedPlaylist {
                 // if we are caught up to the track we just played, and it hasnt yet been played
-                if track.played == false {
-                    do {
+                if track.uuid == unwrappedPlaylist.lastPlayedTrack {
+                    let audioUrl = track.wrappedURL
+                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                    let calculatedAudioURL = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
+                    if FileManager.default.fileExists(atPath: calculatedAudioURL.path) {
                         currentlyPlayingTrack = track
-                        audioPlayer = try AVAudioPlayer(contentsOf: track.wrappedURL)
-                        audioPlayer.delegate = self
-                        audioPlayer.currentTime = track.progress
-                        audioPlayer.play()
-                    } catch {
-                        // couldn't load file :(
+                        playlist = track.playlist
+                        print("The file found at path")
+                        do {
+                            URLSession.shared.downloadTask(with: calculatedAudioURL, completionHandler: { (location, response, error) -> Void in
+                                guard let location = location, error == nil else { return }
+                                do {
+                                    try self.audioPlayer = AVAudioPlayer(contentsOf: location)
+                                    self.audioPlayer.delegate = self
+                                    self.audioPlayer.currentTime = track.progress
+                                    self.audioPlayer.play()
+                                } catch { print("Error \(error)") }
+
+                            }).resume()
+                        }
                     }
                     break
                 }

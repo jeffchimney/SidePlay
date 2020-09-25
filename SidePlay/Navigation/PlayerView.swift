@@ -47,6 +47,8 @@ struct PlayerView: View {
                     seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
 
                     audioHandler.currentlyPlayingTrack?.progress = audioHandler.audioPlayer.currentTime.magnitude
+                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayed = Date()
+                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayedTrack = audioHandler.currentlyPlayingTrack!.uuid
 
                     do {
                         try viewContext.save()

@@ -27,14 +27,23 @@ struct ContentView: View {
         animation: .default)
     private var playlists: FetchedResults<Playlist>
     
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Playlist.lastPlayed, ascending: false)
+        ],
+        predicate: NSPredicate(format: "lastPlayed >= %@", NSDate().addingTimeInterval(-604800)), // last played at least one week ago
+        animation: .default)
+    private var recentlyPlayed: FetchedResults<Playlist>
+    
     var callbackURLs: [URL] = []
     
     init(audioHandler: Binding<AudioHandler>, isPlaying: Binding<Bool>) {
-        //UITableView.appearance().backgroundColor = .backgroundColor
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
+        //UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
 
-            //Use this if NavigationBarTitle is with displayMode = .inline
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.elementColor]
+        //Use this if NavigationBarTitle is with displayMode = .inline
+        //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.elementColor]
+        
+        UITableView.appearance().separatorStyle = .none
         
         self._audioHandler = audioHandler
         self._isPlaying = isPlaying
@@ -42,28 +51,65 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                List {
-                    if downloadHandler.isDownloading {
-                        ProgressBar(downloadHandler: .constant(downloadHandler))
-                            .padding()
+            ScrollView {
+                if downloadHandler.isDownloading {
+                    ProgressBar(downloadHandler: .constant(downloadHandler))
+                        .padding()
+                }
+                LazyVStack {
+                    if recentlyPlayed.count > 0 {
+                        HStack {
+                            Text("Keep Listening")
+                                .font(.title)
+                                .padding([.leading, .trailing, .top])
+                                Spacer()
+                        }
+                    }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .top, spacing: 20) {
+                                ForEach(recentlyPlayed) { recentPlaylist in
+                                    Button {
+                                        withAnimation {
+                                            isPlaying = true
+                                        }
+                                        audioHandler.playlist = recentPlaylist
+                                        audioHandler.playFromWhereWeLeftOff()
+                                    } label: {
+                                        RecentlyPlayedCard(playlist: recentPlaylist)
+                                            .environment(\.managedObjectContext, viewContext)
+                                }
+                            }
+                        }
+                    }
+                    .padding([.leading, .trailing, .top])
+
+                    HStack {
+                        Text("Playlists")
+                            .font(.title)
+                            .padding([.leading, .trailing, .top])
+                            Spacer()
                     }
                     ForEach(playlists) { playlist in
-                        NavigationLink(
-                            destination:
-                                PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
-                                    .environment(\.managedObjectContext, viewContext),
-                            label: {
-                                PlaylistCard(playlist: playlist, chosenColor: Color.redColor, showAddPlayist: $showAddPlayist)
-                                    .environment(\.managedObjectContext, viewContext)
-                                    //.animation(nil)
-                            }
-                        )
+                        VStack {
+                            NavigationLink(
+                                destination:
+                                    PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
+                                        .environment(\.managedObjectContext, viewContext),
+                                label: {
+                                    PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
+                                        .environment(\.managedObjectContext, viewContext)
+                                        //.animation(nil)
+                                }
+                            )
+                        }
+                        .padding([.leading, .trailing, .top])
                     }
                     if showAddPlayist {
-                        PlaylistCard(playlist: Playlist(), isEditing: true, chosenColor: Color.yellowColor, showAddPlayist: $showAddPlayist)
+                        PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
                             //.animation(nil)
+                            .padding([.leading, .trailing, .top])
                     }
+
                 }
                 .listStyle(PlainListStyle())
                 HStack {
@@ -75,14 +121,14 @@ struct ContentView: View {
                             Image(systemName: "minus.circle.fill")
                                 .resizable()
                                 .frame(width: 35, height: 35)
-                                .background(Color.backgroundColor)
-                                .foregroundColor(.elementColor)
+                                //.background(Color.backgroundColor)
+                                //.foregroundColor(.elementColor)
                         } else {
                             Image(systemName: "plus.circle.fill")
                                 .resizable()
                                 .frame(width: 35, height: 35)
-                                .background(Color.backgroundColor)
-                                .foregroundColor(.elementColor)
+                                //.background(Color.backgroundColor)
+                                //.foregroundColor(.elementColor)
                         }
                     })
                     Spacer()
@@ -90,7 +136,7 @@ struct ContentView: View {
             }
             .animation(.easeInOut)
             // Nav Bar Config
-            .navigationBarTitle("Playlists")
+            .navigationBarTitle("Library")
             .navigationBarItems(trailing:
                 Button(action: {
                     showFilePicker.toggle()
@@ -98,7 +144,6 @@ struct ContentView: View {
                     Image(systemName: "square.and.arrow.down")
                         //.resizable()
                         .frame(width: 35, height: 35)
-                        .foregroundColor(Color.elementColor)
                 })
             )
             // Import Config
@@ -115,7 +160,6 @@ struct ContentView: View {
                 UITableView.appearance().separatorStyle = .none
             }
         }
-        .accentColor(.elementColor)
     }
 
     func addTracks(urls: [URL]) {
@@ -170,6 +214,7 @@ struct ContentView: View {
                     newTrack.url = destinationUrl
                     newTrack.isPlaying = false
                     newTrack.played = false
+                    newTrack.uuid = UUID()
                     
                     do {
                         try viewContext.save()
