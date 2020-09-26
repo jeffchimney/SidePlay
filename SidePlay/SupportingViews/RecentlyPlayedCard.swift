@@ -26,6 +26,7 @@ struct RecentlyPlayedCard: View {
                 .fontWeight(.bold)
                 .frame(width: 125)
                 .multilineTextAlignment(.center)
+                .foregroundColor(.primary)
                 .lineLimit(2)
         }
     }

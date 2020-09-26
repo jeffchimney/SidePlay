@@ -57,63 +57,72 @@ struct PlaylistCard: View {
                             .fontWeight(.bold)
                             .lineLimit(2)
                             .padding(.bottom, 5)
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                         Text("Contains \(playlist.trackArray.count) items".uppercased())
                             .font(.caption)
-                            .foregroundColor(.elementColor)
-                    } else {                        
-                        TextField("New Playlist", text: $newPlaylistName) { (result) in }
-                            onCommit: {
-                                let newPlaylist = Playlist(context: viewContext)
-                                newPlaylist.name = newPlaylistName
-//                                if chosenColor == .redColor {
-//                                    newPlaylist.color = ColorEnum.red.rawValue
-//                                } else if chosenColor == .yellowColor {
-//                                    newPlaylist.color = ColorEnum.yellow.rawValue
-//                                } else if chosenColor == .greenColor {
-//                                    newPlaylist.color = ColorEnum.green.rawValue
-//                                } else if chosenColor == .blueColor {
-//                                    newPlaylist.color = ColorEnum.blue.rawValue
-//                                } else {
-//                                    newPlaylist.color = ColorEnum.red.rawValue
-//                                }
-                                newPlaylist.color = ColorEnum.red.rawValue
-                                newPlaylist.image = UIImage(systemName: "photo")!.pngData()
-                                newPlaylist.favorite = false
-                                
-                                self.showAddPlayist = false
-                                
-                                do {
-                                    try viewContext.save()
-                                } catch {
-                                    let nsError = error as NSError
-                                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                            .foregroundColor(.secondary)
+                    } else {
+                        HStack {
+                            TextField("New Playlist", text: $newPlaylistName) { (result) in }
+                                onCommit: {
+                                    let newPlaylist = Playlist(context: viewContext)
+                                    newPlaylist.name = newPlaylistName
+    //                                if chosenColor == .redColor {
+    //                                    newPlaylist.color = ColorEnum.red.rawValue
+    //                                } else if chosenColor == .yellowColor {
+    //                                    newPlaylist.color = ColorEnum.yellow.rawValue
+    //                                } else if chosenColor == .greenColor {
+    //                                    newPlaylist.color = ColorEnum.green.rawValue
+    //                                } else if chosenColor == .blueColor {
+    //                                    newPlaylist.color = ColorEnum.blue.rawValue
+    //                                } else {
+    //                                    newPlaylist.color = ColorEnum.red.rawValue
+    //                                }
+                                    newPlaylist.color = ColorEnum.red.rawValue
+                                    newPlaylist.image = UIImage(systemName: "photo")!.pngData()
+                                    newPlaylist.favorite = false
+                                    
+                                    self.showAddPlayist = false
+                                    
+                                    do {
+                                        try viewContext.save()
+                                    } catch {
+                                        let nsError = error as NSError
+                                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                                    }
                                 }
-                            }
-                            .foregroundColor(.black)
-                            .font(.headline)
-                            .autocapitalization(UITextAutocapitalizationType.words)
-                            .padding(.bottom, 5)
+                                .foregroundColor(.black)
+                                .font(.headline)
+                                .autocapitalization(UITextAutocapitalizationType.words)
+                                .padding(.bottom, 5)
 
-//                        HStack(spacing: 2) {
-//                            ForEach(self.colors) { color in
-//                                if color.color != chosenColor {
-//                                    Button {
-//                                        chosenColor = color.color
-//                                    } label: {
-//                                        Circle()
-//                                            .fill(
-//                                                LinearGradient(
-//                                                    gradient: Gradient(colors: [color.color, color.color]),
-//                                                    startPoint: .topLeading,
-//                                                    endPoint: .bottomTrailing
-//                                                )
-//                                            )
-//                                            .frame(width: 25, height: 25)
-//                                    }
-//                                }
-//                            }
-//                        }
+    //                        HStack(spacing: 2) {
+    //                            ForEach(self.colors) { color in
+    //                                if color.color != chosenColor {
+    //                                    Button {
+    //                                        chosenColor = color.color
+    //                                    } label: {
+    //                                        Circle()
+    //                                            .fill(
+    //                                                LinearGradient(
+    //                                                    gradient: Gradient(colors: [color.color, color.color]),
+    //                                                    startPoint: .topLeading,
+    //                                                    endPoint: .bottomTrailing
+    //                                                )
+    //                                            )
+    //                                            .frame(width: 25, height: 25)
+    //                                    }
+    //                                }
+    //                            }
+    //                        }
+                            Button(action: {
+                                showAddPlayist.toggle()
+                            }, label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.body)
+                                    .foregroundColor(.red)
+                            })
+                        }
                     }
                 }
                 .padding(.horizontal, 5)

@@ -51,101 +51,77 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                if downloadHandler.isDownloading {
-                    ProgressBar(downloadHandler: .constant(downloadHandler))
-                        .padding()
-                }
-                LazyVStack {
-                    if recentlyPlayed.count > 0 {
+            ZStack {
+                ScrollView {
+                    if downloadHandler.isDownloading {
+                        ProgressBar(downloadHandler: .constant(downloadHandler))
+                            .padding()
+                    }
+                    LazyVStack {
+                        if recentlyPlayed.count > 0 {
+                            HStack {
+                                Text("Keep Listening")
+                                    .font(.title)
+                                    .padding([.leading, .trailing, .top])
+                                    Spacer()
+                            }
+                        }
+                        ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(alignment: .top, spacing: 20) {
+                                    ForEach(recentlyPlayed) { recentPlaylist in
+                                        Button {
+                                            withAnimation {
+                                                isPlaying = true
+                                            }
+                                            audioHandler.playlist = recentPlaylist
+                                            audioHandler.playFromWhereWeLeftOff()
+                                        } label: {
+                                            RecentlyPlayedCard(playlist: recentPlaylist)
+                                                .environment(\.managedObjectContext, viewContext)
+                                    }
+                                }
+                            }
+                        }
+                        .padding([.leading, .trailing, .top])
+
                         HStack {
-                            Text("Keep Listening")
+                            Text("Playlists")
                                 .font(.title)
                                 .padding([.leading, .trailing, .top])
                                 Spacer()
                         }
-                    }
-                    ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(alignment: .top, spacing: 20) {
-                                ForEach(recentlyPlayed) { recentPlaylist in
-                                    Button {
-                                        withAnimation {
-                                            isPlaying = true
-                                        }
-                                        audioHandler.playlist = recentPlaylist
-                                        audioHandler.playFromWhereWeLeftOff()
-                                    } label: {
-                                        RecentlyPlayedCard(playlist: recentPlaylist)
-                                            .environment(\.managedObjectContext, viewContext)
-                                }
-                            }
-                        }
-                    }
-                    .padding([.leading, .trailing, .top])
-
-                    HStack {
-                        Text("Playlists")
-                            .font(.title)
-                            .padding([.leading, .trailing, .top])
-                            Spacer()
-                    }
-                    ForEach(playlists) { playlist in
-                        VStack {
-                            NavigationLink(
-                                destination:
-                                    PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
-                                        .environment(\.managedObjectContext, viewContext),
-                                label: {
-                                    PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
-                                        .environment(\.managedObjectContext, viewContext)
-                                        //.animation(nil)
-                                }
-                            )
-                        }
-                        .padding([.leading, .trailing, .top])
-                    }
-                    if showAddPlayist {
-                        PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
-                            //.animation(nil)
-                            .padding([.leading, .trailing, .top])
-                    }
-
-                }
-                .listStyle(PlainListStyle())
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        showAddPlayist.toggle()
-                    }, label: {
                         if showAddPlayist {
-                            Image(systemName: "minus.circle.fill")
-                                .resizable()
-                                .frame(width: 35, height: 35)
-                                //.background(Color.backgroundColor)
-                                //.foregroundColor(.elementColor)
-                        } else {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 35, height: 35)
-                                //.background(Color.backgroundColor)
-                                //.foregroundColor(.elementColor)
+                            PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
+                                //.animation(nil)
+                                .padding([.leading, .trailing, .top])
                         }
-                    })
-                    Spacer()
+                        ForEach(playlists) { playlist in
+                            VStack {
+                                NavigationLink(
+                                    destination:
+                                        PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
+                                            .environment(\.managedObjectContext, viewContext),
+                                    label: {
+                                        PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
+                                            .environment(\.managedObjectContext, viewContext)
+                                            //.animation(nil)
+                                    }
+                                )
+                            }
+                            .padding([.leading, .trailing, .top])
+                        }
+
+                    }
+                    .listStyle(PlainListStyle())
                 }
+                .animation(.easeInOut)
+                .zIndex(0)
+                
+                FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist)
+                    .zIndex(1)
             }
-            .animation(.easeInOut)
             // Nav Bar Config
             .navigationBarTitle("Library")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    showFilePicker.toggle()
-                }, label: {
-                    Image(systemName: "square.and.arrow.down")
-                        //.resizable()
-                        .frame(width: 35, height: 35)
-                })
-            )
             // Import Config
             .sheet(isPresented: $showFilePicker, onDismiss: {
                 self.showFilePicker = false
