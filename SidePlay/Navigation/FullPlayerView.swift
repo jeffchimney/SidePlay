@@ -25,7 +25,6 @@ struct FullPlayerView: View {
         VStack {
             Text(track?.wrappedName ?? audioHandler.currentlyPlayingTrack?.wrappedName ?? "Uknown Track")
                 .font(Font.system(.headline))
-                .foregroundColor(Color.elementColor)
                 .padding()
             
             Spacer()
@@ -37,6 +36,7 @@ struct FullPlayerView: View {
             Slider(value: $seekPosition, in: 0...1) { (test) in
                 audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
             }
+            .accentColor(.buttonGradientEnd)
             .padding([.leading, .trailing], 25)
             .onReceive(timer) { input in
                 if audioHandler.currentlyPlayingTrack != nil {
@@ -99,7 +99,9 @@ struct FullPlayerView: View {
                     }
                 }, label: {
                     Image(systemName: "gobackward.30")
-                        .font(Font.system(.largeTitle))
+                        .imageScale(.large)
+                        .font(.title)
+                        .foregroundColor(.buttonGradientEnd)
                 })
                 .padding()
                 Spacer()
@@ -113,10 +115,17 @@ struct FullPlayerView: View {
                         isPlaying = true
                     }
                 }, label: {
-                    Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .aspectRatio(contentMode: .fit)
+                    ZStack {
+                        LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
+                        Image(systemName: isPlaying ? "pause" : "play")
+                            .imageScale(.large)
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            //.frame(width: 50, height: 50)
+                            //.aspectRatio(contentMode: .fit)
+                    }
                 })
                 .padding()
                 Spacer()
@@ -129,7 +138,9 @@ struct FullPlayerView: View {
                     }
                 }, label: {
                     Image(systemName: "goforward.30")
-                        .font(Font.system(.largeTitle))
+                        .imageScale(.large)
+                        .font(.title)
+                        .foregroundColor(.buttonGradientEnd)
                 })
                 .padding()
                 Spacer()

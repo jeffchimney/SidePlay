@@ -27,6 +27,10 @@ extension UIColor {
     
     static let secondaryColor: UIColor = UIColor(named: "SecondaryColor")!
     
+    static let buttonGradientStart: UIColor = UIColor(named: "ButtonGradientStart")!
+    
+    static let buttonGradientEnd: UIColor = UIColor(named: "ButtonGradientEnd")!
+    
     convenience init(red: Int, green: Int, blue: Int, a: CGFloat = 1.0) {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: a)
     }
@@ -58,4 +62,8 @@ extension Color {
     static let elementColor: Color = Color(UIColor(named: "ElementColor")!)
     
     static let secondaryColor: Color = Color(UIColor(named: "SecondaryColor")!)
+    
+    static let buttonGradientStart: Color = Color(UIColor(named: "ButtonGradientStart")!)
+    
+    static let buttonGradientEnd: Color = Color(UIColor(named: "ButtonGradientEnd")!)
 }

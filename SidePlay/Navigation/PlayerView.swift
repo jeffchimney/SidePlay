@@ -30,10 +30,17 @@ struct PlayerView: View {
                 }
                 isPlaying = audioHandler.audioPlayer.isPlaying
             }, label: {
-                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .aspectRatio(contentMode: .fit)
+                ZStack {
+                    LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                    Image(systemName: isPlaying ? "pause" : "play")
+                        .imageScale(.large)
+                        .foregroundColor(.white)
+                        .font(.headline)
+                        //.frame(width: 50, height: 50)
+                        //.aspectRatio(contentMode: .fit)
+                }
             })
             .padding()
             Text(track?.wrappedName ?? audioHandler.currentlyPlayingTrack?.wrappedName ?? "Uknown Track")

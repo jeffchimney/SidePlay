@@ -15,12 +15,14 @@ struct FloatingMenu: View {
     @Binding var showFilePicker: Bool
     @Binding var showAddPlaylist: Bool
     
+    var addButtonShouldExpand: Bool
+    
     var body: some View {
         HStack {
             Spacer()
             VStack {
                 Spacer()
-                if showMenuItem1 {
+                if showMenuItem1 && addButtonShouldExpand {
                     Button {
                         showFilePicker = true
                         showMenuItem1 = false
@@ -28,19 +30,19 @@ struct FloatingMenu: View {
                         rotation = 0
                     } label: {
                         ZStack {
-                            Circle()
-                                .foregroundColor(.accentColor)
+                            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
                                 .frame(width: 40, height: 40)
+                                .clipShape(Circle())
                             Image(systemName: "square.and.arrow.down")
                                 .imageScale(.medium)
                                 .foregroundColor(.white)
+                                .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
                         }
                     }
-                    .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
                     .transition(.move(edge: .trailing))
                 }
                 
-                if showMenuItem2 {
+                if showMenuItem2 && addButtonShouldExpand {
                     Button {
                         withAnimation(.easeInOut) {
                             showAddPlaylist = true
@@ -54,47 +56,55 @@ struct FloatingMenu: View {
                         })
                     } label: {
                         ZStack {
-                            Circle()
-                                .foregroundColor(.accentColor)
+                            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
                                 .frame(width: 40, height: 40)
+                                .clipShape(Circle())
                             Image(systemName: "music.note.list")
                                 .imageScale(.medium)
                                 .foregroundColor(.white)
+                                .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
                         }
                     }
                     .padding(10)
-                    .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
                     .transition(.move(edge: .trailing))
                 }
                 Button {
-                    if !showMenuItem1 {
-                        withAnimation(.easeInOut) {
-                            rotation = showMenuItem1 ? 0 : 45
-                            showMenuItem2.toggle()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    if addButtonShouldExpand {
+                        if !showMenuItem1 {
                             withAnimation(.easeInOut) {
-                                self.showMenuItem1.toggle()
+                                rotation = showMenuItem1 ? 0 : 45
+                                showMenuItem2.toggle()
                             }
-                        })
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                                withAnimation(.easeInOut) {
+                                    self.showMenuItem1.toggle()
+                                }
+                            })
+                        } else {
+                            withAnimation(.easeInOut) {
+                                rotation = showMenuItem1 ? 0 : 45
+                                showMenuItem1.toggle()
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                                withAnimation(.easeInOut) {
+                                    self.showMenuItem2.toggle()
+                                }
+                            })
+                        }
                     } else {
-                        withAnimation(.easeInOut) {
-                            rotation = showMenuItem1 ? 0 : 45
-                            showMenuItem1.toggle()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-                            withAnimation(.easeInOut) {
-                                self.showMenuItem2.toggle()
-                            }
-                        })
+                        showFilePicker = true
                     }
                 } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.accentColor)
-                        .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
-                        .rotationEffect(.degrees(rotation))
+                    ZStack {
+                        LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                        Image(systemName: "plus")
+                            .imageScale(.large)
+                            .foregroundColor(.white)
+                            .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
+                            .rotationEffect(.degrees(rotation))
+                    }
                 }
                 .padding([.leading, .trailing, .bottom], 10)
             }
@@ -105,6 +115,6 @@ struct FloatingMenu: View {
 
 struct FloatingMenu_Previews: PreviewProvider {
     static var previews: some View {
-        FloatingMenu(showFilePicker: .constant(true), showAddPlaylist: .constant(true))
+        FloatingMenu(showFilePicker: .constant(true), showAddPlaylist: .constant(true), addButtonShouldExpand: false)
     }
 }

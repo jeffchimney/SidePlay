@@ -15,7 +15,7 @@ struct RecentlyPlayedCard: View {
     var body: some View {
         VStack {
 
-            Color.yellowColor
+            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
 //                .resizable()
 //                .aspectRatio(contentMode: .fit)
                 .frame(width: 125, height: 125, alignment: .center)

@@ -17,60 +17,52 @@ struct PlaylistView: View {
     var playlist: Playlist
     
     var body: some View {
-        VStack {
-            Button {
-                withAnimation {
-                    isPlaying = true
-                }
-                audioHandler.playlist = playlist
-                audioHandler.playFromWhereWeLeftOff()
-            } label: {
-                HStack {
-                    Image(systemName: "play")
-                        .resizable()
-                        .padding(6)
-                        .frame(width: 24, height: 24)
-                        //.background(Color.elementColor)
-                        .clipShape(Circle())
-                        //.foregroundColor(.white)
-                    Text("Resume")
-                        //.foregroundColor(.elementColor)
-                    Spacer()
-                }
-                .padding()
-            }
-            
-            List {
-                ForEach(playlist.trackArray) { track in
-                    Button {
-                        withAnimation {
-                            isPlaying = true
-                        }
-                        audioHandler.playlist = playlist
-                        audioHandler.playTrack(track: track)
-                    } label: {
-                        Text(track.name!)
+        ZStack {
+            VStack {
+                Button {
+                    withAnimation {
+                        isPlaying = true
                     }
-
+                    audioHandler.playlist = playlist
+                    audioHandler.playFromWhereWeLeftOff()
+                } label: {
+                    HStack {
+                        ZStack(alignment: .center) {
+                            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                                .frame(height: 30)
+                                .clipShape(Capsule())
+                            Text("  Resume  ")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
+                    }
+                    .padding(10)
                 }
+                
+                List {
+                    ForEach(playlist.trackArray) { track in
+                        Button {
+                            withAnimation {
+                                isPlaying = true
+                            }
+                            audioHandler.playlist = playlist
+                            audioHandler.playTrack(track: track)
+                        } label: {
+                            Text(track.name!)
+                        }
+
+                    }
+                }
+                .id(UUID())
             }
-            .id(UUID())
+            .zIndex(0)
+            
+            FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: .constant(false), addButtonShouldExpand: false)
+                .zIndex(1)
         }
         // Nav Bar Config
         .navigationBarTitle(playlist.wrappedName)
-        .navigationBarItems(trailing:
-            Button(action: {
-                showFilePicker.toggle()
-            }, label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .padding(6)
-                    .frame(width: 24, height: 24)
-                    //.background(Color.elementColor)
-                    .clipShape(Circle())
-                    //.foregroundColor(.white)
-            })
-        )
         // Import Config
         .sheet(isPresented: $showFilePicker, onDismiss: {
             self.showFilePicker = false

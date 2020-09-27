@@ -117,7 +117,7 @@ struct ContentView: View {
                 .animation(.easeInOut)
                 .zIndex(0)
                 
-                FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist)
+                FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist, addButtonShouldExpand: true)
                     .zIndex(1)
             }
             // Nav Bar Config
