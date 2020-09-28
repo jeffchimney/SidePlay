@@ -22,132 +22,141 @@ struct FullPlayerView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        VStack {
-            Text(track?.wrappedName ?? audioHandler.currentlyPlayingTrack?.wrappedName ?? "Uknown Track")
-                .font(Font.system(.headline))
-                .padding()
-            
-            Spacer()
-            
-            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, audioHandler: $audioHandler)
-                .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
-                //.clipShape(RoundedRectangle(cornerRadius: 15))
-            
-            Slider(value: $seekPosition, in: 0...1) { (test) in
-                audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
-            }
-            .accentColor(.buttonGradientEnd)
-            .padding([.leading, .trailing], 25)
-            .onReceive(timer) { input in
-                if audioHandler.currentlyPlayingTrack != nil {
-                    seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
+        NavigationView {
+            VStack {
+//                HStack {
+//                    Text("Now Playing")
+//                        .font(Font.system(.largeTitle))
+//                        .fontWeight(.bold)
+//                        .padding()
+//                    Spacer()
+//                }
+                
+                Spacer()
+                
+                TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, audioHandler: $audioHandler)
+                    .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
+                    //.clipShape(RoundedRectangle(cornerRadius: 15))
+                
+                Slider(value: $seekPosition, in: 0...1) { (test) in
+                    audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
+                }
+                .onAppear {
+                    withAnimation(.easeInOut) {
+                        seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
+                    }
+                }
+                .accentColor(.buttonGradientEnd)
+                .padding([.leading, .trailing], 25)
+                .onReceive(timer) { input in
+                    if audioHandler.currentlyPlayingTrack != nil {
+                        seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
 
-                    audioHandler.currentlyPlayingTrack?.progress = audioHandler.audioPlayer.currentTime.magnitude
-                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayed = Date()
-                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayedTrack = audioHandler.currentlyPlayingTrack!.uuid
-                    
-                    elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
-                    runtime = Int(audioHandler.audioPlayer.duration.magnitude)
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        // Replace this implementation with code to handle the error appropriately.
-                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                        audioHandler.currentlyPlayingTrack?.progress = audioHandler.audioPlayer.currentTime.magnitude
+                        audioHandler.currentlyPlayingTrack?.playlist?.lastPlayed = Date()
+                        audioHandler.currentlyPlayingTrack?.playlist?.lastPlayedTrack = audioHandler.currentlyPlayingTrack!.uuid
+                        
+                        elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
+                        runtime = Int(audioHandler.audioPlayer.duration.magnitude)
+                        do {
+                            try viewContext.save()
+                        } catch {
+                            // Replace this implementation with code to handle the error appropriately.
+                            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                            let nsError = error as NSError
+                            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                        }
                     }
                 }
-            }
-            HStack {
-                if elapsedTime%60 < 10 {
-                    Text("\(elapsedTime/60):0\(elapsedTime%60)")
-                        .font(Font.system(.caption))
-                        .foregroundColor(Color.elementColor)
-                        .padding(.leading)
-                } else {
-                    Text("\(elapsedTime/60):\(elapsedTime%60)")
-                        .font(Font.system(.caption))
-                        .foregroundColor(Color.elementColor)
-                        .padding(.leading)
-                }
-                Spacer()
-                if runtime%60 < 10 {
-                    Text("\(runtime/60):0\(runtime%60)")
-                        .font(Font.system(.caption))
-                        .foregroundColor(Color.elementColor)
-                        .padding(.trailing)
-                } else {
-                    Text("\(runtime/60):\(runtime%60)")
-                        .font(Font.system(.caption))
-                        .foregroundColor(Color.elementColor)
-                        .padding(.trailing)
-                }
-            }
-            .padding(.bottom)
-            
-            // playback controls
-            HStack {
-                Spacer()
-                // skip back
-                Button(action: {
-                    if audioHandler.audioPlayer.isPlaying {
-                        audioHandler.pause()
-                        isPlaying = false
+                HStack {
+                    if elapsedTime%60 < 10 {
+                        Text("\(elapsedTime/60):0\(elapsedTime%60)")
+                            .font(Font.system(.caption))
+                            .padding(.leading)
+                            .onAppear {
+                                elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
+                            }
                     } else {
-                        audioHandler.play()
-                        isPlaying = true
+                        Text("\(elapsedTime/60):\(elapsedTime%60)")
+                            .font(Font.system(.caption))
+                            .padding(.leading)
+                            .onAppear {
+                                elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
+                            }
                     }
-                }, label: {
-                    Image(systemName: "gobackward.30")
-                        .imageScale(.large)
-                        .font(.title)
-                        .foregroundColor(.buttonGradientEnd)
-                })
-                .padding()
-                Spacer()
-                // play / pause
-                Button(action: {
-                    if audioHandler.audioPlayer.isPlaying {
-                        audioHandler.pause()
-                        isPlaying = false
+                    Spacer()
+                    if runtime%60 < 10 {
+                        Text("\(runtime/60):0\(runtime%60)")
+                            .font(Font.system(.caption))
+                            .padding(.trailing)
+                            .onAppear {
+                                runtime = Int(audioHandler.audioPlayer.duration.magnitude)
+                            }
                     } else {
-                        audioHandler.play()
-                        isPlaying = true
+                        Text("\(runtime/60):\(runtime%60)")
+                            .font(Font.system(.caption))
+                            .padding(.trailing)
+                            .onAppear {
+                                runtime = Int(audioHandler.audioPlayer.duration.magnitude)
+                            }
                     }
-                }, label: {
-                    ZStack {
-                        LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
-                            .frame(width: 60, height: 60)
-                            .clipShape(Circle())
-                        Image(systemName: isPlaying ? "pause" : "play")
+                }
+                .padding(.bottom)
+                
+                // playback controls
+                HStack {
+                    Spacer()
+                    // skip back
+                    Button(action: {
+                        audioHandler.skipBackward()
+                    }, label: {
+                        Image(systemName: "gobackward.30")
                             .imageScale(.large)
-                            .foregroundColor(.white)
-                            .font(.headline)
-                            //.frame(width: 50, height: 50)
-                            //.aspectRatio(contentMode: .fit)
-                    }
-                })
-                .padding()
-                Spacer()
-                // skip forward
-                Button(action: {
-                    if audioHandler.audioPlayer.isPlaying {
-                        audioHandler.pause()
-                    } else {
-                        audioHandler.play()
-                    }
-                }, label: {
-                    Image(systemName: "goforward.30")
-                        .imageScale(.large)
-                        .font(.title)
-                        .foregroundColor(.buttonGradientEnd)
-                })
-                .padding()
+                            .font(.title)
+                            .foregroundColor(.buttonGradientEnd)
+                    })
+                    .padding()
+                    Spacer()
+                    // play / pause
+                    Button(action: {
+                        if isPlaying {
+                            audioHandler.pause()
+                            isPlaying = false
+                        } else {
+                            audioHandler.play()
+                            isPlaying = true
+                        }
+                    }, label: {
+                        ZStack {
+                            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                            Image(systemName: isPlaying ? "pause" : "play")
+                                .imageScale(.large)
+                                .foregroundColor(.white)
+                                .font(.headline)
+                                //.frame(width: 50, height: 50)
+                                //.aspectRatio(contentMode: .fit)
+                        }
+                    })
+                    .padding()
+                    Spacer()
+                    // skip forward
+                    Button(action: {
+                        audioHandler.skipForward()
+                    }, label: {
+                        Image(systemName: "goforward.30")
+                            .imageScale(.large)
+                            .font(.title)
+                            .foregroundColor(.buttonGradientEnd)
+                    })
+                    .padding()
+                    Spacer()
+                }
                 Spacer()
             }
-            Spacer()
+            .navigationBarTitle("Now Playing")
         }
-        .navigationBarTitle("Now Playing")
     }
 }
 

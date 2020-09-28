@@ -67,7 +67,7 @@ struct ContentView: View {
                             }
                         }
                         ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(alignment: .top, spacing: 20) {
+                                HStack(alignment: .top) {
                                     ForEach(recentlyPlayed) { recentPlaylist in
                                         Button {
                                             withAnimation {
@@ -80,9 +80,10 @@ struct ContentView: View {
                                                 .environment(\.managedObjectContext, viewContext)
                                     }
                                 }
+                                    .padding([.leading, .trailing], 10)
                             }
                         }
-                        .padding([.leading, .trailing, .top])
+                        .padding(.top)
 
                         HStack {
                             Text("Playlists")

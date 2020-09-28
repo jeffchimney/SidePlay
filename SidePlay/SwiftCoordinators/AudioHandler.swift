@@ -174,6 +174,14 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
+    
+    func skipForward() {
+        audioPlayer.currentTime += 30
+    }
+    
+    func skipBackward() {
+        audioPlayer.currentTime -= 30
+    }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("Did finish Playing")

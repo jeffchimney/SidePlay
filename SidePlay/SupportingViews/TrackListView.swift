@@ -18,18 +18,13 @@ struct TrackListView: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
-                ForEach(playlist.trackArray) { track in
+                ForEach(0..<playlist.trackArray.count) { i in
+                //ForEach(playlist.trackArray) { track in
                     Button {
-                        audioHandler.playTrack(track: track)
+                        audioHandler.playTrack(track: playlist.trackArray[i])
                     } label: {
-                        ZStack {
-                            if track.objectID == audioHandler.currentlyPlayingTrack!.objectID {
-                                track.playlist!.colorForEnum
-                            }
-                            makeRowView(track: track)
-                                .padding(5)
-                        }
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        makeRowView(track: playlist.trackArray[i], counter: i)
+                            .padding(5)
                     }
                     .padding([.leading, .trailing], 5)
                     .foregroundColor(Color.elementColor)
@@ -44,8 +39,7 @@ struct TrackListView: View {
         .padding()
     }
 
-    func makeRowView(track: Track) -> TrackListRowView {
-        self.counter += 1
+    func makeRowView(track: Track, counter: Int) -> TrackListRowView {
         return TrackListRowView(track: track, trackNumber: counter, nowPlayingTrackID: audioHandler.currentlyPlayingTrack!.objectID)
     }
 }
