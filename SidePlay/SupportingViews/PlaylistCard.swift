@@ -26,29 +26,21 @@ struct PlaylistCard: View {
     var body: some View {
         ZStack(alignment: .leading) {
             HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.white, .white]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
                     
-                    if !isEditing {
-                        Image(uiImage: UIImage(data: playlist.wrappedImage)!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 25, height: 25, alignment: .center)
-                    } else {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 25, height: 25, alignment: .center)
-                    }
+                if !isEditing {
+//                        Image(uiImage: UIImage(data: playlist.wrappedImage)!)
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fit)
+//                            .frame(width: 25, height: 25, alignment: .center)
+                    AsyncImage(imageLastPathComponent: playlist.wrappedImageLastPathComponent)
+                        .frame(width: 60, height: 60, alignment: .center)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                } else {
+                    AsyncImage(imageLastPathComponent: "")
+                        .frame(width: 60, height: 60, alignment: .center)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                .frame(width: 60, height: 60, alignment: .center)
                 
                 VStack(alignment: .leading) {
                     if !isEditing {
@@ -67,19 +59,7 @@ struct PlaylistCard: View {
                                 onCommit: {
                                     let newPlaylist = Playlist(context: viewContext)
                                     newPlaylist.name = newPlaylistName
-    //                                if chosenColor == .redColor {
-    //                                    newPlaylist.color = ColorEnum.red.rawValue
-    //                                } else if chosenColor == .yellowColor {
-    //                                    newPlaylist.color = ColorEnum.yellow.rawValue
-    //                                } else if chosenColor == .greenColor {
-    //                                    newPlaylist.color = ColorEnum.green.rawValue
-    //                                } else if chosenColor == .blueColor {
-    //                                    newPlaylist.color = ColorEnum.blue.rawValue
-    //                                } else {
-    //                                    newPlaylist.color = ColorEnum.red.rawValue
-    //                                }
-                                    newPlaylist.color = ColorEnum.red.rawValue
-                                    newPlaylist.image = UIImage(systemName: "photo")!.pngData()
+                                    newPlaylist.imageLastPathComponent = ""
                                     newPlaylist.favorite = false
                                     
                                     self.showAddPlayist = false
@@ -95,26 +75,6 @@ struct PlaylistCard: View {
                                 .font(.headline)
                                 .autocapitalization(UITextAutocapitalizationType.words)
                                 .padding(.bottom, 5)
-
-    //                        HStack(spacing: 2) {
-    //                            ForEach(self.colors) { color in
-    //                                if color.color != chosenColor {
-    //                                    Button {
-    //                                        chosenColor = color.color
-    //                                    } label: {
-    //                                        Circle()
-    //                                            .fill(
-    //                                                LinearGradient(
-    //                                                    gradient: Gradient(colors: [color.color, color.color]),
-    //                                                    startPoint: .topLeading,
-    //                                                    endPoint: .bottomTrailing
-    //                                                )
-    //                                            )
-    //                                            .frame(width: 25, height: 25)
-    //                                    }
-    //                                }
-    //                            }
-    //                        }
                             Button(action: {
                                 showAddPlayist.toggle()
                             }, label: {

@@ -145,10 +145,43 @@ struct ContentView: View {
         withAnimation {
             print(downloadHandler.isDownloading)
             
+            var imageLastPathComponent = ""
+            // look for image to use as cover image
+            for url in sortedUrls {
+                let pathExtension = url.pathExtension
+                
+                let uti = UTType(filenameExtension: pathExtension)
+                
+                if ((uti?.conforms(to: UTType.image)) == true) {
+                    imageLastPathComponent = url.lastPathComponent
+                    
+                    // then lets create your document folder url
+                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+                    // lets create your destination file url
+                    let destinationUrl = documentsDirectoryURL.appendingPathComponent(imageLastPathComponent)
+                    print(destinationUrl)
+
+                    do {
+                        // after downloading your file you need to move it to your destination url
+                        try FileManager.default.moveItem(at: url, to: destinationUrl)
+                        print("File moved to documents folder")
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+            
             downloadHandler.set(downloadTotal: Double(sortedUrls.count))
+            // create new playlist to load import into
+            let newPlaylist = createNewPlaylist(counter: 0, imageLastPathComponent: imageLastPathComponent)
             var counter = 1
             for url in sortedUrls {
-                do {
+                let pathExtension = url.pathExtension
+                
+                let uti = UTType(filenameExtension: pathExtension)
+                
+                if ((uti?.conforms(to: UTType.audio)) == true) {
                     print(downloadHandler.downloadProgress)
                     downloadHandler.set(downloadProgress: Double(counter))
                     downloadHandler.set(percentDownloaded: downloadHandler.downloadProgress / downloadHandler.downloadTotal)
@@ -168,23 +201,10 @@ struct ContentView: View {
                         print(error.localizedDescription)
                     }
                     
-                    var unsortedPlaylist: Playlist
-                    let unsortedPlaylistFetchRequest : NSFetchRequest<Playlist> = Playlist.fetchRequest()
-                    unsortedPlaylistFetchRequest.predicate = NSPredicate(format: "name == %@", "Unsorted")
-                    let fetchedResults = try viewContext.fetch(unsortedPlaylistFetchRequest)
-                    if fetchedResults.count > 0 {
-                        unsortedPlaylist = fetchedResults.first!
-                    } else {
-                        unsortedPlaylist = Playlist(context: viewContext)
-                        unsortedPlaylist.name = "Unsorted"
-                        unsortedPlaylist.color = ColorEnum.red.rawValue
-                        unsortedPlaylist.image = UIImage(systemName: "arrow.2.squarepath")?.pngData()
-                    }
-                    
                     print(destinationUrl)
                     let newTrack = Track(context: viewContext)
                     newTrack.name = url.lastPathComponent
-                    newTrack.playlist = unsortedPlaylist
+                    newTrack.playlist = newPlaylist
                     newTrack.progress = 0
                     newTrack.sortOrder = Int64(counter)
                     // could repoint url to local url if the track has been downloaded
@@ -199,13 +219,32 @@ struct ContentView: View {
                         let nsError = error as NSError
                         fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                     }
+                    counter += 1
                 }
-                catch { print("Error \(error)") }
-                counter += 1
             }
             
             downloadHandler.set(isDownloading: false)
         }
+    }
+    
+    func createNewPlaylist(counter: Int, imageLastPathComponent: String) -> Playlist {
+        do {
+            var newPlaylist: Playlist
+            let unsortedPlaylistFetchRequest : NSFetchRequest<Playlist> = Playlist.fetchRequest()
+            unsortedPlaylistFetchRequest.predicate = NSPredicate(format: "name == %@", counter > 0 ? "New Playlist \(counter)" : "New Playlist")
+            let fetchedResults = try viewContext.fetch(unsortedPlaylistFetchRequest)
+            if fetchedResults.count > 0 {
+                return createNewPlaylist(counter: counter + 1, imageLastPathComponent: imageLastPathComponent)
+            } else {
+                newPlaylist = Playlist(context: viewContext)
+                newPlaylist.name = counter > 0 ? "New Playlist \(counter)" : "New Playlist"
+                newPlaylist.imageLastPathComponent = imageLastPathComponent
+                
+                return newPlaylist
+            }
+        }
+        catch { print("Error \(error)") }
+        return Playlist()
     }
 
     func deleteItems(offsets: IndexSet) {

@@ -14,12 +14,19 @@ struct RecentlyPlayedCard: View {
     
     var body: some View {
         VStack {
-
-            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-                .frame(width: 125, height: 125, alignment: .center)
-                .clipShape(RoundedRectangle(cornerRadius: 15))
+            
+            if playlist.wrappedImageLastPathComponent == ""  {
+                LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+    //                .resizable()
+    //                .aspectRatio(contentMode: .fit)
+                    .frame(width: 125, height: 125, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+            } else {
+                AsyncImage(imageLastPathComponent: playlist.wrappedImageLastPathComponent)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 125, height: 125, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+            }
             
             Text(playlist.wrappedName)
                 .font(.caption)

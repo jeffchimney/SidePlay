@@ -20,8 +20,7 @@ extension Playlist {
 
     @NSManaged public var name: String?
     @NSManaged public var favorite: Bool
-    @NSManaged public var color: Int64
-    @NSManaged public var image: Data?
+    @NSManaged public var imageLastPathComponent: String?
     @NSManaged public var tracks: NSSet?
     @NSManaged public var lastPlayed: Date?
     @NSManaged public var lastPlayedTrack: UUID?
@@ -30,23 +29,8 @@ extension Playlist {
         name ?? "Unknown Track"
     }
     
-    public var colorForEnum: Color {
-        switch color {
-        case 0:
-            return Color.blueColor
-        case 1:
-            return Color.greenColor
-        case 2:
-            return Color.yellowColor
-        case 3:
-            return Color.redColor
-        default:
-            return Color.redColor
-        }
-    }
-    
-    public var wrappedImage: Data {
-        image ?? UIImage(systemName: "photo")?.pngData() ?? Data()
+    public var wrappedImageLastPathComponent: String {
+        imageLastPathComponent ?? ""
     }
     
     public var trackArray: [Track] {

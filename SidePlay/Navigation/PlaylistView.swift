@@ -14,7 +14,7 @@ struct PlaylistView: View {
     @Binding var audioHandler: AudioHandler
     @Binding var isPlaying: Bool
     
-    var playlist: Playlist
+    @ObservedObject var playlist: Playlist
     
     var body: some View {
         ZStack {
@@ -78,44 +78,81 @@ struct PlaylistView: View {
     func addTracksTo(playlist: Playlist, urls: [URL]) {
         let sortedUrls = urls.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
         withAnimation {
+            var imageLastPathComponent = ""
+            // look for image to use as cover image
+            for url in sortedUrls {
+                let pathExtension = url.pathExtension
+                
+                let uti = UTType(filenameExtension: pathExtension)
+                
+                if ((uti?.conforms(to: UTType.image)) == true) {
+                    imageLastPathComponent = url.lastPathComponent
+                    
+                    // then lets create your document folder url
+                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+                    // lets create your destination file url
+                    let destinationUrl = documentsDirectoryURL.appendingPathComponent(imageLastPathComponent)
+                    print(destinationUrl)
+
+                    do {
+                        // after downloading your file you need to move it to your destination url
+                        try FileManager.default.moveItem(at: url, to: destinationUrl)
+                        print("File moved to documents folder")
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+            
             var counter = 0
             for url in sortedUrls {
-                // then lets create your document folder url
-                let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let pathExtension = url.pathExtension
+                
+                let uti = UTType(filenameExtension: pathExtension)
+                
+                if ((uti?.conforms(to: UTType.audio)) == true) {
+                    // then lets create your document folder url
+                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 
-                // lets create your destination file url
-                let destinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString)
-                print(destinationUrl)
+                    // lets create your destination file url
+                    let destinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString)
+                    print(destinationUrl)
 
-                do {
-                    // after downloading your file you need to move it to your destination url
-                    try FileManager.default.moveItem(at: url, to: destinationUrl)
-                    print("File moved to documents folder")
-                } catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-                
-                print(destinationUrl)
-                let newTrack = Track(context: viewContext)
-                newTrack.name = url.lastPathComponent
-                newTrack.playlist = playlist
-                newTrack.progress = 0
-                newTrack.sortOrder = Int64(counter)
-                newTrack.url = destinationUrl
-                newTrack.isPlaying = false
-                newTrack.played = false
-                newTrack.uuid = UUID()
-                
-                playlist.addToTracks(newTrack)
-                counter += 1
-                
-                do {
-                    try viewContext.save()
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nsError = error as NSError
-                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    do {
+                        // after downloading your file you need to move it to your destination url
+                        try FileManager.default.moveItem(at: url, to: destinationUrl)
+                        print("File moved to documents folder")
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                    
+                    print(destinationUrl)
+                    let newTrack = Track(context: viewContext)
+                    newTrack.name = url.lastPathComponent
+                    newTrack.playlist = playlist
+                    newTrack.progress = 0
+                    newTrack.sortOrder = Int64(counter)
+                    newTrack.url = destinationUrl
+                    newTrack.isPlaying = false
+                    newTrack.played = false
+                    newTrack.uuid = UUID()
+                    
+                    if imageLastPathComponent != "" {
+                        newTrack.playlist?.imageLastPathComponent = imageLastPathComponent
+                    }
+                    
+                    playlist.addToTracks(newTrack)
+                    counter += 1
+                    
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    }
                 }
             }
         }

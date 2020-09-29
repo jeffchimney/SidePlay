@@ -24,19 +24,12 @@ struct FullPlayerView: View {
     var body: some View {
         NavigationView {
             VStack {
-//                HStack {
-//                    Text("Now Playing")
-//                        .font(Font.system(.largeTitle))
-//                        .fontWeight(.bold)
-//                        .padding()
-//                    Spacer()
-//                }
                 
                 Spacer()
                 
-                TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, audioHandler: $audioHandler)
+                //AsyncImage(imageLastPathComponent: $audioHandler.currentlyPlayingTrack.wrappedValue!.playlist!.wrappedImageLastPathComponent)
+                PageView(audioHandler: $audioHandler, isPlaying: $isPlaying, imageLastPathComponent: $audioHandler.currentlyPlayingTrack.wrappedValue!.playlist!.wrappedImageLastPathComponent)
                     .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
-                    //.clipShape(RoundedRectangle(cornerRadius: 15))
                 
                 Slider(value: $seekPosition, in: 0...1) { (test) in
                     audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
