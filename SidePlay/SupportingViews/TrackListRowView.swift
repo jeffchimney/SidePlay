@@ -10,12 +10,13 @@ import CoreData
 
 struct TrackListRowView: View {
     
+    @EnvironmentObject var audioHandler: AudioHandler
+    
     @State private var phase = 0.0
     
     var track: Track
     var trackNumber: Int
     var nowPlayingTrackID: NSManagedObjectID
-    @Binding var isPlaying: Bool
     
     var body: some View {
         HStack {
@@ -43,7 +44,7 @@ struct TrackListRowView: View {
                 LinearGradient(gradient: Gradient(colors: [.clear, .buttonGradientStart, .buttonGradientStart, .buttonGradientEnd, .buttonGradientEnd, .clear]), startPoint: .leading, endPoint: .trailing)
                     .mask(
                         ZStack {
-                            if isPlaying {
+                            if audioHandler.isPlaying {
                                 ForEach(0..<2) { i in
                                     Wave(strength: 7.5, frequency: 10, phase: phase + (Double(i) * 2))
                                         .foregroundColor(.white)
@@ -70,6 +71,6 @@ struct TrackListRowView: View {
 
 struct TrackListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackListRowView(track: Track(), trackNumber: 1, nowPlayingTrackID: NSManagedObjectID(), isPlaying: .constant(false))
+        TrackListRowView(track: Track(), trackNumber: 1, nowPlayingTrackID: NSManagedObjectID())
     }
 }

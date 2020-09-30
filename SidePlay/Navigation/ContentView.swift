@@ -12,11 +12,10 @@ import AVKit
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var audioHandler: AudioHandler
     
-    @State var showFilePicker = false
-    @State var showAddPlayist = false
-    @Binding var audioHandler: AudioHandler
-    @Binding var isPlaying: Bool
+    @State private var showFilePicker = false
+    @State private var showAddPlayist = false
     
     @ObservedObject var downloadHandler = DownloadHandler(isDownloading: false, downloadProgress: 0, downloadTotal: 10)
 
@@ -37,16 +36,13 @@ struct ContentView: View {
     
     var callbackURLs: [URL] = []
     
-    init(audioHandler: Binding<AudioHandler>, isPlaying: Binding<Bool>) {
+    init() {
         //UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.elementColor]
 
         //Use this if NavigationBarTitle is with displayMode = .inline
         //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.elementColor]
         
         UITableView.appearance().separatorStyle = .none
-        
-        self._audioHandler = audioHandler
-        self._isPlaying = isPlaying
     }
 
     var body: some View {
@@ -71,7 +67,7 @@ struct ContentView: View {
                                     ForEach(recentlyPlayed) { recentPlaylist in
                                         Button {
                                             withAnimation {
-                                                isPlaying = true
+                                                audioHandler.isShowingPlayer = true
                                             }
                                             audioHandler.playlist = recentPlaylist
                                             audioHandler.playFromWhereWeLeftOff()
@@ -100,11 +96,13 @@ struct ContentView: View {
                             VStack {
                                 NavigationLink(
                                     destination:
-                                        PlaylistView(audioHandler: $audioHandler, isPlaying: $isPlaying, playlist: playlist)
-                                            .environment(\.managedObjectContext, viewContext),
+                                        PlaylistView(playlist: playlist)
+                                            .environment(\.managedObjectContext, viewContext)
+                                            .environmentObject(audioHandler),
                                     label: {
                                         PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
                                             .environment(\.managedObjectContext, viewContext)
+                                            .environmentObject(audioHandler)
                                             //.animation(nil)
                                     }
                                 )
@@ -263,7 +261,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(audioHandler: .constant(AudioHandler()), isPlaying: .constant(false)).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 

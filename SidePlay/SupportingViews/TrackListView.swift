@@ -9,12 +9,11 @@ import SwiftUI
 
 struct TrackListView: View {
     
+    @EnvironmentObject var audioHandler: AudioHandler
+    
     var playlist: Playlist
     
-    @State var counter: Int = 1
-    
-    @Binding var audioHandler: AudioHandler
-    @Binding var isPlaying: Bool
+    @State private var counter: Int = 1
     
     var body: some View {
         ScrollView {
@@ -41,12 +40,12 @@ struct TrackListView: View {
     }
 
     func makeRowView(track: Track, counter: Int) -> TrackListRowView {
-        return TrackListRowView(track: track, trackNumber: counter, nowPlayingTrackID: audioHandler.currentlyPlayingTrack!.objectID, isPlaying: $isPlaying)
+        return TrackListRowView(track: track, trackNumber: counter, nowPlayingTrackID: audioHandler.currentlyPlayingTrack!.objectID)
     }
 }
 
 struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackListView(playlist: Playlist(), audioHandler: .constant(AudioHandler()), isPlaying: .constant(false))
+        TrackListView(playlist: Playlist())
     }
 }

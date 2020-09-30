@@ -10,9 +10,9 @@ import AVKit
 
 struct PlaylistView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State var showFilePicker = false
-    @Binding var audioHandler: AudioHandler
-    @Binding var isPlaying: Bool
+    @EnvironmentObject var audioHandler: AudioHandler
+    
+    @State private var showFilePicker = false
     
     @ObservedObject var playlist: Playlist
     
@@ -21,7 +21,7 @@ struct PlaylistView: View {
             VStack {
                 Button {
                     withAnimation {
-                        isPlaying = true
+                        audioHandler.isShowingPlayer = true
                     }
                     audioHandler.playlist = playlist
                     audioHandler.playFromWhereWeLeftOff()
@@ -44,7 +44,7 @@ struct PlaylistView: View {
                     ForEach(playlist.trackArray) { track in
                         Button {
                             withAnimation {
-                                isPlaying = true
+                                audioHandler.isShowingPlayer = true
                             }
                             audioHandler.playlist = playlist
                             audioHandler.playTrack(track: track)
@@ -161,6 +161,6 @@ struct PlaylistView: View {
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(audioHandler: .constant(AudioHandler()), isPlaying: .constant(false), playlist: Playlist())
+        PlaylistView(playlist: Playlist())
     }
 }

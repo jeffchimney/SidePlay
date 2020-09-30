@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FloatingMenu: View {
     
-    @State var showMenuItem1 = false
-    @State var showMenuItem2 = false
+    @State private var showMenuItem1 = false
+    @State private var showMenuItem2 = false
     @State private var rotation = 0.0
     @Binding var showFilePicker: Bool
     @Binding var showAddPlaylist: Bool

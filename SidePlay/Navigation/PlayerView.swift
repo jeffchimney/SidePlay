@@ -10,11 +10,10 @@ import AVKit
 
 struct PlayerView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var audioHandler: AudioHandler
-    
-    @State var isPlaying: Bool
-    @State var seekPosition: Double = 0
-    @State var showFullPlayer: Bool = false
+    @EnvironmentObject var audioHandler: AudioHandler
+
+    @State private var seekPosition: Double = 0
+    @State private var showFullPlayer: Bool = false
     
     var playlist: Playlist?
     var track: Track?
@@ -28,13 +27,13 @@ struct PlayerView: View {
                 } else {
                     audioHandler.play()
                 }
-                isPlaying = audioHandler.audioPlayer.isPlaying
+                //audioHandler.isPlaying = audioHandler.audioPlayer.isPlaying
             }, label: {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
                         .frame(width: 50, height: 50)
                         .clipShape(Circle())
-                    Image(systemName: isPlaying ? "pause" : "play")
+                    Image(systemName: audioHandler.isPlaying ? "pause" : "play")
                         .imageScale(.large)
                         .foregroundColor(.white)
                         .font(.headline)
@@ -74,8 +73,9 @@ struct PlayerView: View {
         .sheet(isPresented: $showFullPlayer, onDismiss: {
             self.showFullPlayer = false
         }) {
-            FullPlayerView(audioHandler: $audioHandler, isPlaying: $isPlaying)
+            FullPlayerView()
                 .environment(\.managedObjectContext, viewContext)
+                .environmentObject(audioHandler)
         }
         .navigationBarTitle("Now Playing")
     }
@@ -83,6 +83,6 @@ struct PlayerView: View {
 
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(audioHandler: .constant(AudioHandler()), isPlaying: false, playlist: Playlist())
+        PlayerView()
     }
 }

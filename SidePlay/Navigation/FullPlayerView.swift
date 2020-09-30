@@ -9,13 +9,12 @@ import SwiftUI
 
 struct FullPlayerView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Binding var audioHandler: AudioHandler
-    
-    @Binding var isPlaying: Bool
-    @State var seekPosition: Double = 0
-    @State var showFullPlayer: Bool = false
-    @State var elapsedTime: Int = 0
-    @State var runtime: Int = 0
+    @EnvironmentObject var audioHandler: AudioHandler
+
+    @State private var seekPosition: Double = 0
+    @State private var showFullPlayer: Bool = false
+    @State private var elapsedTime: Int = 0
+    @State private var runtime: Int = 0
     
     var playlist: Playlist?
     var track: Track?
@@ -28,7 +27,8 @@ struct FullPlayerView: View {
                 Spacer()
                 
                 //AsyncImage(imageLastPathComponent: $audioHandler.currentlyPlayingTrack.wrappedValue!.playlist!.wrappedImageLastPathComponent)
-                PageView(audioHandler: $audioHandler, isPlaying: $isPlaying, imageLastPathComponent: $audioHandler.currentlyPlayingTrack.wrappedValue!.playlist!.wrappedImageLastPathComponent)
+                PageView(imageLastPathComponent: $audioHandler.currentlyPlayingTrack.wrappedValue!.playlist!.wrappedImageLastPathComponent)
+                    .environmentObject(audioHandler)
                     .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
                 
                 Slider(value: $seekPosition, in: 0...1) { (test) in
@@ -112,19 +112,17 @@ struct FullPlayerView: View {
                     Spacer()
                     // play / pause
                     Button(action: {
-                        if isPlaying {
+                        if audioHandler.isPlaying {
                             audioHandler.pause()
-                            isPlaying = false
                         } else {
                             audioHandler.play()
-                            isPlaying = true
                         }
                     }, label: {
                         ZStack {
                             LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
                                 .frame(width: 60, height: 60)
                                 .clipShape(Circle())
-                            Image(systemName: isPlaying ? "pause" : "play")
+                            Image(systemName: audioHandler.isPlaying ? "pause" : "play")
                                 .imageScale(.large)
                                 .foregroundColor(.white)
                                 .font(.headline)
@@ -155,6 +153,6 @@ struct FullPlayerView: View {
 
 struct FullPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        FullPlayerView(audioHandler: .constant(AudioHandler()), isPlaying: .constant(false))
+        FullPlayerView()
     }
 }

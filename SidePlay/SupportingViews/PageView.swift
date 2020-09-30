@@ -9,10 +9,9 @@ import SwiftUI
 
 struct PageView: View {
     
-    @State var counter: Int = 1
+    @EnvironmentObject var audioHandler: AudioHandler
     
-    @Binding var audioHandler: AudioHandler
-    @Binding var isPlaying: Bool
+    @State private var counter: Int = 1
     
     var imageLastPathComponent: String
     
@@ -22,7 +21,7 @@ struct PageView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 15))
                 .padding()
             
-            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!, audioHandler: $audioHandler, isPlaying: $isPlaying)
+            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!)
         }
         .tabViewStyle(PageTabViewStyle())
     }
@@ -30,6 +29,6 @@ struct PageView: View {
 
 struct PageView_Previews: PreviewProvider {
     static var previews: some View {
-        PageView(audioHandler: .constant(AudioHandler()), isPlaying: .constant(false), imageLastPathComponent: "")
+        PageView(imageLastPathComponent: "")
     }
 }

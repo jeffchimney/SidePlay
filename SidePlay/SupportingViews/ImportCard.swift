@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImportCard: View {
     
-    @State var playlist: String = ""
+    @State private var playlist: String = ""
     
     var body: some View {
         ZStack(alignment: .leading) {

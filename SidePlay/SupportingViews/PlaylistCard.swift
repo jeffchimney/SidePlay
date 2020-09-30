@@ -14,8 +14,8 @@ struct PlaylistCard: View {
     var playlist: Playlist
     var isEditing: Bool = false
     
-    @State var newPlaylistName: String = ""
-    //@State var chosenColor: Color
+    @State private var newPlaylistName: String = ""
+    //@State private var chosenColor: Color
     
     var colors: [Colors] = [
         Colors(color: Color.blueColor), Colors(color: Color.greenColor), Colors(color: Color.yellowColor), Colors(color: Color.redColor)

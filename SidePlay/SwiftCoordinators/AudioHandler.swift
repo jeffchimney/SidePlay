@@ -6,6 +6,7 @@ import CoreData
 class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
     @Published var isPlaying: Bool = false
+    @Published var isShowingPlayer: Bool = false
     @Published var currentlyPlayingTrack: Track?
 
     var audioPlayer = AVAudioPlayer()
@@ -53,6 +54,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func playFromWhereWeLeftOff() {
+        isPlaying = true
         if let unwrappedPlaylist = playlist {
             let sortedPlaylist = unwrappedPlaylist.trackArray.sorted(by: { $0.sortOrder < $1.sortOrder })
             for track in sortedPlaylist {
@@ -98,6 +100,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 //    }
 //
     func playTrack(track: Track) {
+        isPlaying = true
         let audioUrl = track.wrappedURL
         
         currentlyPlayingTrack = track
@@ -158,10 +161,12 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func play() {
+        isPlaying = true
         audioPlayer.play()
     }
     
     func pause() {
+        isPlaying = false
         audioPlayer.pause()
         currentlyPlayingTrack?.progress = audioPlayer.currentTime.magnitude
         

@@ -18,22 +18,23 @@ enum ColorEnum: Int64 {
 struct SidePlayApp: App {
     let persistenceController = PersistenceController.shared
 
-    @State var audioHandler = AudioHandler()
-    @State var isPlaying: Bool = false
+    @ObservedObject var audioHandler: AudioHandler = AudioHandler()
     
     var body: some Scene {
         WindowGroup {
             VStack {
-                ContentView(audioHandler: $audioHandler, isPlaying: $isPlaying)
+                ContentView()
+                    .environmentObject(audioHandler)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 
-                if isPlaying {
+                if audioHandler.isShowingPlayer {
                     VStack {
                         Divider()
-                        PlayerView(audioHandler: $audioHandler, isPlaying: isPlaying)
+                        PlayerView()
+                            .environmentObject(audioHandler)
+                            .environment(\.managedObjectContext, persistenceController.container.viewContext)
                             .frame(width: UIScreen.main.bounds.size.width, height: 75)
                             //.background(RoundedCorners(color: .backgroundColor, tl: 25, tr: 25, bl: 0, br: 0))
-                            .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     }
                     //.edgesIgnoringSafeArea(.all)
                     .transition(.move(edge: .bottom))
