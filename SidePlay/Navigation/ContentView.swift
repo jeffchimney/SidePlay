@@ -134,7 +134,7 @@ struct ContentView: View {
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
             }
-        }
+        }.accentColor(.buttonGradientStart)
     }
 
     func addTracks(urls: [URL]) {

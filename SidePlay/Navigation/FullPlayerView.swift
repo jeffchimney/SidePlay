@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MediaPlayer
 
 struct FullPlayerView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -33,6 +34,7 @@ struct FullPlayerView: View {
                 
                 Slider(value: $seekPosition, in: 0...1) { (test) in
                     audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioHandler.audioPlayer.currentTime
                 }
                 .onAppear {
                     withAnimation(.easeInOut) {
@@ -126,8 +128,6 @@ struct FullPlayerView: View {
                                 .imageScale(.large)
                                 .foregroundColor(.white)
                                 .font(.headline)
-                                //.frame(width: 50, height: 50)
-                                //.aspectRatio(contentMode: .fit)
                         }
                     })
                     .padding()
@@ -144,6 +144,34 @@ struct FullPlayerView: View {
                     .padding()
                     Spacer()
                 }
+                .padding(.bottom)
+                
+                HStack {
+                    Spacer()
+                    Button {
+                        // Show Airplay overlay
+                        let rect = CGRect(x: 0, y: 0, width: 0, height: 0)
+                        let airplayVolume = MPVolumeView(frame: rect)
+                        airplayVolume.showsVolumeSlider = false
+                        UIApplication.shared.windows.first?.addSubview(airplayVolume)
+                        for view: UIView in airplayVolume.subviews {
+                          if let button = view as? UIButton {
+                            button.sendActions(for: .touchUpInside)
+                            break
+                          }
+                        }
+                        airplayVolume.removeFromSuperview()
+                    } label: {
+                        Image(systemName: "airplayaudio")
+                            .imageScale(.medium)
+                            .font(.body)
+                            .foregroundColor(.buttonGradientEnd)
+                    }
+                    Spacer()
+                }
+                Text(AVAudioSession.sharedInstance().currentRoute.outputs.first?.portName ?? "" == "Speaker" ? "" : AVAudioSession.sharedInstance().currentRoute.outputs.first?.portName ?? "")
+                    .font(.caption)
+                    .foregroundColor(.buttonGradientEnd)
                 Spacer()
             }
             .navigationBarTitle("Now Playing")

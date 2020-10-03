@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import AVFoundation
 import CoreData
+import MediaPlayer
 
 class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
@@ -18,7 +19,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         super.init()
         
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .allowAirPlay])
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
             print("Playback OK")
             try AVAudioSession.sharedInstance().setActive(true)
             print("Session is Active")
@@ -27,6 +28,71 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
         
         audioPlayer.delegate = self
+        setupRemoteTransportControls()
+    }
+    
+    func setupRemoteTransportControls() {
+        // Get the shared MPRemoteCommandCenter
+        let commandCenter = MPRemoteCommandCenter.shared()
+
+        // Add handler for Play Command
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { [unowned self] event in
+            if self.audioPlayer.rate == 0.0 {
+                play()
+                return .success
+            }
+            return .commandFailed
+        }
+
+        // Add handler for Pause Command
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { [unowned self] event in
+            if self.audioPlayer.rate == 1.0 {
+                pause()
+                return .success
+            }
+            return .commandFailed
+        }
+        
+        // Add handler for Pause Command
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.preferredIntervals = [30]
+        commandCenter.skipBackwardCommand.addTarget { [unowned self] event in
+            skipBackward()
+            return .success
+        }
+        
+        // Add handler for Pause Command
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.preferredIntervals = [30]
+        commandCenter.skipForwardCommand.addTarget { [unowned self] event in
+            skipForward()
+            return .success
+        }
+        
+        commandCenter.changePlaybackPositionCommand.isEnabled = true
+        commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(changePlaybackPositionCommand(_:)))
+    }
+    
+    func setupNowPlaying() {
+        // Define Now Playing Info
+        var nowPlayingInfo = [String : Any]()
+        nowPlayingInfo[MPMediaItemPropertyTitle] = currentlyPlayingTrack?.wrappedName
+        let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let calculatedImageURL = documentsDirectoryURL.appendingPathComponent(playlist!.wrappedImageLastPathComponent)
+        if let image = UIImage(contentsOfFile: calculatedImageURL.path) {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] =
+                MPMediaItemArtwork(boundsSize: image.size) { size in
+                    return image
+            }
+        }
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer.currentTime
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = audioPlayer.duration
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = audioPlayer.rate
+        
+        // Set the metadata
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
     func playNextTrackInPlaylist() {
@@ -35,14 +101,8 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             for track in unwrappedPlaylist.trackArray.sorted(by: { $0.wrappedName < $1.wrappedName }) {
                 // if we are caught up to the track we just played, and it hasnt yet been played
                 if hasFoundCurrentTrack {
-                    do {
-                        currentlyPlayingTrack = track
-                        audioPlayer = try AVAudioPlayer(contentsOf: track.wrappedURL)
-                        audioPlayer.delegate = self
-                        audioPlayer.play()
-                    } catch {
-                        // couldn't load file :(
-                    }
+                    currentlyPlayingTrack = track
+                    playTrack(track: currentlyPlayingTrack!)
                     break
                 }
                 
@@ -66,6 +126,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                     if FileManager.default.fileExists(atPath: calculatedAudioURL.path) {
                         currentlyPlayingTrack = track
                         playlist = track.playlist
+                        
                         print("The file found at path")
                         do {
                             URLSession.shared.downloadTask(with: calculatedAudioURL, completionHandler: { (location, response, error) -> Void in
@@ -75,6 +136,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                                     self.audioPlayer.delegate = self
                                     self.audioPlayer.currentTime = track.progress
                                     self.audioPlayer.play()
+                                    self.setupNowPlaying()
                                 } catch { print("Error \(error)") }
 
                             }).resume()
@@ -86,19 +148,6 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
     
-//    func playTrack(track: Track) {
-//        do {
-//            currentlyPlayingTrack = track
-//            playlist = track.playlist
-//            audioPlayer = try AVAudioPlayer(data: track.data!)
-//            audioPlayer.delegate = self
-//            audioPlayer.currentTime = track.progress
-//            audioPlayer.play()
-//        } catch {
-//            // couldn't load file :(
-//        }
-//    }
-//
     func playTrack(track: Track) {
         isPlaying = true
         let audioUrl = track.wrappedURL
@@ -120,31 +169,12 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                         self.audioPlayer.delegate = self
                         self.audioPlayer.currentTime = track.progress
                         self.audioPlayer.play()
+                        self.setupNowPlaying()
                     } catch { print("Error \(error)") }
 
                 }).resume()
             }
         }
-        //else {
-//
-//            // you can use NSURLSession.sharedSession to download the data asynchronously
-//            URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
-//                guard let location = location, error == nil else { return }
-//                do {
-//                    // after downloading your file you need to move it to your destination url
-//                    try FileManager.default.moveItem(at: location, to: destinationUrl)
-//
-//                    do {
-//                        try self.audioPlayer = AVAudioPlayer(contentsOf: destinationUrl)
-//                        self.audioPlayer.delegate = self
-//                        self.audioPlayer.play()
-//                    } catch { print("Error \(error)") }
-//                    print("File moved to documents folder")
-//                } catch let error as NSError {
-//                    print(error.localizedDescription)
-//                }
-//            }).resume()
-//        }
     }
     
     
@@ -161,11 +191,14 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func play() {
+        audioPlayer.rate = 1.0
         isPlaying = true
         audioPlayer.play()
+        setupNowPlaying()
     }
     
     func pause() {
+        audioPlayer.rate = 0.0
         isPlaying = false
         audioPlayer.pause()
         currentlyPlayingTrack?.progress = audioPlayer.currentTime.magnitude
@@ -182,17 +215,17 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     func skipForward() {
         audioPlayer.currentTime += 30
+        MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer.currentTime
     }
     
     func skipBackward() {
         audioPlayer.currentTime -= 30
+        MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioPlayer.currentTime
     }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("Did finish Playing")
         currentlyPlayingTrack!.played = true
-        playNextTrackInPlaylist()
-        
         
         do {
             try viewContext!.save()
@@ -202,5 +235,16 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
+        
+        playNextTrackInPlaylist()
+    }
+    
+    @objc func changePlaybackPositionCommand(_ event:
+              MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+        let time = event.positionTime
+        
+        audioPlayer.currentTime = time
+        
+        return MPRemoteCommandHandlerStatus.success
     }
 }

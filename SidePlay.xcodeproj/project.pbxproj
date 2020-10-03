@@ -23,6 +23,7 @@
 		BE9C711E250D2B0A0053FBB7 /* PlaylistCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */; };
 		BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */; };
 		BEB32A0B2522E75100357241 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB32A0A2522E75100357241 /* PageView.swift */; };
+		BEB4963925285AFA00990DE3 /* AirplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB4963825285AFA00990DE3 /* AirplayView.swift */; };
 		BEB65F712522A40A009CC379 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB65F702522A40A009CC379 /* ImageLoader.swift */; };
 		BEB65F772522A45B009CC379 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB65F762522A45B009CC379 /* AsyncImage.swift */; };
 		BEB74C2D2508797B0035FEC1 /* SidePlayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C2C2508797B0035FEC1 /* SidePlayApp.swift */; };
@@ -74,6 +75,7 @@
 		BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCard.swift; sourceTree = "<group>"; };
 		BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyPlayedCard.swift; sourceTree = "<group>"; };
 		BEB32A0A2522E75100357241 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		BEB4963825285AFA00990DE3 /* AirplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirplayView.swift; sourceTree = "<group>"; };
 		BEB65F702522A40A009CC379 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		BEB65F762522A45B009CC379 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		BEB74C292508797B0035FEC1 /* SidePlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SidePlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +153,7 @@
 			children = (
 				BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */,
 				BE7ECD3B250C146900B3E618 /* AudioHandler.swift */,
+				BEB4963825285AFA00990DE3 /* AirplayView.swift */,
 			);
 			path = SwiftCoordinators;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				BE3A80502509DBBD00C489DD /* Extensions.swift in Sources */,
 				BEB32A0B2522E75100357241 /* PageView.swift in Sources */,
 				BE9C711E250D2B0A0053FBB7 /* PlaylistCard.swift in Sources */,
+				BEB4963925285AFA00990DE3 /* AirplayView.swift in Sources */,
 				BEB74C362508797C0035FEC1 /* Persistence.swift in Sources */,
 				BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */,
 				BE0FE12A250DC12D00C9B7D8 /* DownloadingView.swift in Sources */,

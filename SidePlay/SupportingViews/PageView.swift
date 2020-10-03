@@ -21,6 +21,11 @@ struct PageView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 15))
                 .padding()
             
+//            Image(uiImage: UIImage(contentsOfFile: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(imageLastPathComponent).path)!)
+//                .resizable()
+//                .clipShape(RoundedRectangle(cornerRadius: 15))
+//                .padding()
+            
             TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!)
         }
         .tabViewStyle(PageTabViewStyle())
