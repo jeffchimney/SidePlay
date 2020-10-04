@@ -158,7 +158,6 @@ struct ContentView: View {
 
                     // lets create your destination file url
                     let destinationUrl = documentsDirectoryURL.appendingPathComponent(imageLastPathComponent)
-                    print(destinationUrl)
 
                     do {
                         // after downloading your file you need to move it to your destination url
@@ -189,7 +188,6 @@ struct ContentView: View {
 
                     // lets create your destination file url
                     let destinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString)
-                    print(destinationUrl)
 
                     do {
                         // after downloading your file you need to move it to your destination url
@@ -199,7 +197,6 @@ struct ContentView: View {
                         print(error.localizedDescription)
                     }
                     
-                    print(destinationUrl)
                     let newTrack = Track(context: viewContext)
                     newTrack.name = url.lastPathComponent
                     newTrack.playlist = newPlaylist

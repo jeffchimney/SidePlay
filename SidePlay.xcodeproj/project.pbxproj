@@ -20,6 +20,7 @@
 		BE3A80502509DBBD00C489DD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A804F2509DBBD00C489DD /* Extensions.swift */; };
 		BE41AF022521A4A600D73F62 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE41AF012521A4A600D73F62 /* Wave.swift */; };
 		BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ECD3B250C146900B3E618 /* AudioHandler.swift */; };
+		BE95FBCF2529724C00B84D40 /* CueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95FBCE2529724C00B84D40 /* CueParser.swift */; };
 		BE9C711E250D2B0A0053FBB7 /* PlaylistCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */; };
 		BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */; };
 		BEB32A0B2522E75100357241 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB32A0A2522E75100357241 /* PageView.swift */; };
@@ -72,6 +73,7 @@
 		BE3A804F2509DBBD00C489DD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		BE41AF012521A4A600D73F62 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		BE7ECD3B250C146900B3E618 /* AudioHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHandler.swift; sourceTree = "<group>"; };
+		BE95FBCE2529724C00B84D40 /* CueParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueParser.swift; sourceTree = "<group>"; };
 		BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCard.swift; sourceTree = "<group>"; };
 		BEABDD14251DAA85003E77DF /* RecentlyPlayedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyPlayedCard.swift; sourceTree = "<group>"; };
 		BEB32A0A2522E75100357241 /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			children = (
 				BE3A804F2509DBBD00C489DD /* Extensions.swift */,
 				BEB65F702522A40A009CC379 /* ImageLoader.swift */,
+				BE95FBCE2529724C00B84D40 /* CueParser.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE95FBCF2529724C00B84D40 /* CueParser.swift in Sources */,
 				BE3A80432509D1D900C489DD /* PlaylistView.swift in Sources */,
 				BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */,
 				BEB74C392508797C0035FEC1 /* SidePlay.xcdatamodeld in Sources */,

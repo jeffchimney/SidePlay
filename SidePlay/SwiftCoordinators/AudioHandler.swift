@@ -18,6 +18,10 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     override init() {
         super.init()
         
+        audioPlayer.delegate = self
+    }
+    
+    func setupRemoteTransportControls() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
             print("Playback OK")
@@ -27,11 +31,6 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             print(error)
         }
         
-        audioPlayer.delegate = self
-        setupRemoteTransportControls()
-    }
-    
-    func setupRemoteTransportControls() {
         // Get the shared MPRemoteCommandCenter
         let commandCenter = MPRemoteCommandCenter.shared()
 
@@ -76,6 +75,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func setupNowPlaying() {
+        setupRemoteTransportControls()
         // Define Now Playing Info
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = currentlyPlayingTrack?.wrappedName

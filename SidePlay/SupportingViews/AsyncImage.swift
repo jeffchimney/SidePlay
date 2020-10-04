@@ -11,11 +11,9 @@ struct AsyncImage: View {
     @StateObject private var loader: ImageLoader
 
     init(imageLastPathComponent: String) {
-        print(imageLastPathComponent)
         // to check if it exists before downloading it
         let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let calculatedImageURL = documentsDirectoryURL.appendingPathComponent(imageLastPathComponent)
-        print(calculatedImageURL)
         
         _loader = StateObject(wrappedValue: ImageLoader(url: calculatedImageURL))
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 extension UIColor {
     
@@ -66,4 +67,10 @@ extension Color {
     static let buttonGradientStart: Color = Color(UIColor(named: "ButtonGradientStart")!)
     
     static let buttonGradientEnd: Color = Color(UIColor(named: "ButtonGradientEnd")!)
+}
+
+extension UTType {
+    
+    static let cue: UTType = UTType("com.Chimney.SidePlay.Cue")!
+    
 }
