@@ -16,6 +16,7 @@ struct FullPlayerView: View {
     @State private var showFullPlayer: Bool = false
     @State private var elapsedTime: Int = 0
     @State private var runtime: Int = 0
+    @State private var timerIsRunning: Bool = false
     
     var playlist: Playlist?
     var track: Track?
@@ -66,40 +67,30 @@ struct FullPlayerView: View {
                 HStack {
                     if elapsedTime%60 < 10 {
                         Text("\(elapsedTime/60):0\(elapsedTime%60)")
-                            .font(Font.system(.caption))
+                            .font(Font.system(.caption, design: .monospaced))
                             .padding(.leading)
                             .onAppear {
                                 elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
                             }
                     } else {
                         Text("\(elapsedTime/60):\(elapsedTime%60)")
-                            .font(Font.system(.caption))
+                            .font(Font.system(.caption, design: .monospaced))
                             .padding(.leading)
                             .onAppear {
                                 elapsedTime = Int(audioHandler.audioPlayer.currentTime.magnitude)
                             }
                     }
                     Spacer()
-                    // Sleep timer button
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "timer")
-                            .imageScale(.medium)
-                            .font(.body)
-                            .foregroundColor(.buttonGradientEnd)
-                    }
-                    Spacer()
                     if runtime%60 < 10 {
                         Text("\(runtime/60):0\(runtime%60)")
-                            .font(Font.system(.caption))
+                            .font(Font.system(.caption, design: .monospaced))
                             .padding(.trailing)
                             .onAppear {
                                 runtime = Int(audioHandler.audioPlayer.duration.magnitude)
                             }
                     } else {
                         Text("\(runtime/60):\(runtime%60)")
-                            .font(Font.system(.caption))
+                            .font(Font.system(.caption, design: .monospaced))
                             .padding(.trailing)
                             .onAppear {
                                 runtime = Int(audioHandler.audioPlayer.duration.magnitude)
@@ -107,6 +98,23 @@ struct FullPlayerView: View {
                     }
                 }
                 .padding(.bottom)
+                // Sleep timer button
+                HStack {
+                    Button {
+                        withAnimation {
+                            timerIsRunning.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "timer")
+                            .imageScale(.medium)
+                            .font(.body)
+                            .foregroundColor(.buttonGradientEnd)
+                    }
+                    if timerIsRunning {
+                        Text("0:30")
+                            .font(Font.system(.caption, design: .monospaced))
+                    }
+                }
                 
                 // playback controls
                 HStack {
