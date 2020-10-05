@@ -178,17 +178,17 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     
-    func resumePlaylist(track: Track) {
-        if let unwrappedPlaylist = playlist {
-            for track in unwrappedPlaylist.trackArray {
-                // if we are caught up to the track we just played, and it hasnt yet been played
-                if track.played == false {
-                    playTrack(track: track)
-                    break
-                }
-            }
-        }
-    }
+//    func resumePlaylist(track: Track) {
+//        if let unwrappedPlaylist = playlist {
+//            for track in unwrappedPlaylist.trackArray {
+//                // if we are caught up to the track we just played, and it hasnt yet been played
+//                if track.played == false {
+//                    playTrack(track: track)
+//                    break
+//                }
+//            }
+//        }
+//    }
     
     func play() {
         audioPlayer.rate = 1.0
@@ -225,7 +225,9 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         print("Did finish Playing")
+        // set played = true and progress = 0 on the played track, so that if it is played again, it starts from the beginning.
         currentlyPlayingTrack!.played = true
+        currentlyPlayingTrack!.progress = 0
         
         do {
             try viewContext!.save()

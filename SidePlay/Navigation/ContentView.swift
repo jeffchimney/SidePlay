@@ -116,8 +116,10 @@ struct ContentView: View {
                 .animation(.easeInOut)
                 .zIndex(0)
                 
-                FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist, addButtonShouldExpand: true)
+                if !showAddPlayist {
+                    FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist, addButtonShouldExpand: true)
                     .zIndex(1)
+                }
             }
             // Nav Bar Config
             .navigationBarTitle("Library")
@@ -134,7 +136,8 @@ struct ContentView: View {
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
             }
-        }.accentColor(.buttonGradientStart)
+        }
+        .accentColor(.buttonGradientStart)
     }
 
     func addTracks(urls: [URL]) {

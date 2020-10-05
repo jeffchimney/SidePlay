@@ -19,25 +19,27 @@ struct PlaylistView: View {
     var body: some View {
         ZStack {
             VStack {
-                Button {
-                    withAnimation {
-                        audioHandler.isShowingPlayer = true
-                    }
-                    audioHandler.playlist = playlist
-                    audioHandler.playFromWhereWeLeftOff()
-                } label: {
-                    HStack {
-                        ZStack(alignment: .center) {
-                            LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
-                                .frame(height: 30)
-                                .clipShape(Capsule())
-                            Text("  Resume  ")
-                                .font(.headline)
-                                .foregroundColor(.white)
+                if playlist.trackArray.count > 0 {
+                    Button {
+                        withAnimation {
+                            audioHandler.isShowingPlayer = true
                         }
-                        Spacer()
+                        audioHandler.playlist = playlist
+                        audioHandler.playFromWhereWeLeftOff()
+                    } label: {
+                        HStack {
+                            ZStack(alignment: .center) {
+                                LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
+                                    .frame(height: 30)
+                                    .clipShape(Capsule())
+                                Text("  Resume  ")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                            Spacer()
+                        }
+                        .padding(10)
                     }
-                    .padding(10)
                 }
                 
                 List {
