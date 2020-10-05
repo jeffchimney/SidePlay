@@ -80,6 +80,16 @@ struct FullPlayerView: View {
                             }
                     }
                     Spacer()
+                    // Sleep timer button
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "timer")
+                            .imageScale(.medium)
+                            .font(.body)
+                            .foregroundColor(.buttonGradientEnd)
+                    }
+                    Spacer()
                     if runtime%60 < 10 {
                         Text("\(runtime/60):0\(runtime%60)")
                             .font(Font.system(.caption))
