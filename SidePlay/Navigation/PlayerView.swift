@@ -27,7 +27,6 @@ struct PlayerView: View {
                 } else {
                     audioHandler.play()
                 }
-                //audioHandler.isPlaying = audioHandler.audioPlayer.isPlaying
             }, label: {
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
@@ -37,35 +36,15 @@ struct PlayerView: View {
                         .imageScale(.large)
                         .foregroundColor(.white)
                         .font(.headline)
-                        //.frame(width: 50, height: 50)
-                        //.aspectRatio(contentMode: .fit)
                 }
             })
             .padding()
             Text(track?.wrappedName ?? audioHandler.currentlyPlayingTrack?.wrappedName ?? "Uknown Track")
             Spacer()
-//            Slider(value: $seekPosition, in: 0...1) { (test) in
-//                audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
-//            }
-//            .padding([.leading, .trailing], 50)
-            .onReceive(timer) { input in
-                if audioHandler.currentlyPlayingTrack != nil {
-                    seekPosition = audioHandler.audioPlayer.currentTime.magnitude / audioHandler.audioPlayer.duration.magnitude
-
-                    audioHandler.currentlyPlayingTrack?.progress = audioHandler.audioPlayer.currentTime.magnitude
-                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayed = Date()
-                    audioHandler.currentlyPlayingTrack?.playlist?.lastPlayedTrack = audioHandler.currentlyPlayingTrack!.uuid
-
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        // Replace this implementation with code to handle the error appropriately.
-                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                    }
-                }
-            }
+//            Image(systemName: "chevron.up")
+//                .imageScale(.large)
+//                .foregroundColor(.elementColor)
+//                .padding()
         }
         .onTapGesture {
             self.showFullPlayer.toggle()

@@ -97,24 +97,83 @@ struct FullPlayerView: View {
                             }
                     }
                 }
-                .padding(.bottom)
+                
                 // Sleep timer button
                 HStack {
-                    Button {
-                        withAnimation {
-                            timerIsRunning.toggle()
+//                    Button {
+//                        showTimerPopover = true
+//                    } label: {
+//                        Image(systemName: "timer")
+//                            .imageScale(.medium)
+//                            .font(.body)
+//                            .foregroundColor(.buttonGradientEnd)
+//                    }
+                    
+//                    Picker(selection: $audioHandler.timerSeconds, label: Text("Set timer for")) {
+//                        Text("0:15").tag(900)
+//                        Text("0:30").tag(1800)
+//                        Text("0:45").tag(2700)
+//                        Text("1:00").tag(3600)
+//                    }.pickerStyle(MenuPickerStyle())
+                    
+                    Menu {
+                        if audioHandler.timerIsActive {
+                            Button(action: {
+                                audioHandler.stopTimer()
+                            }) {
+                                Label("Cancel", systemImage: "xmark.circle.fill")
+                            }
+                        }
+                        Button(action: {
+                            audioHandler.stopTimer()
+                            audioHandler.setTimer(seconds: 3600)
+                        }) {
+                            Label("1:00", systemImage: "1.circle")
+                        }
+                        Button(action: {
+                            audioHandler.stopTimer()
+                            audioHandler.setTimer(seconds: 2700)
+                        }) {
+                            Label("0:45", systemImage: "45.circle")
+                        }
+                        Button(action: {
+                            audioHandler.stopTimer()
+                            audioHandler.setTimer(seconds: 1800)
+                        }) {
+                            Label("0:30", systemImage: "30.circle")
+                        }
+                        Button(action: {
+                            audioHandler.stopTimer()
+                            audioHandler.setTimer(seconds: 900)
+                        }) {
+                            Label("0:15", systemImage: "15.circle")
                         }
                     } label: {
                         Image(systemName: "timer")
                             .imageScale(.medium)
                             .font(.body)
                             .foregroundColor(.buttonGradientEnd)
+                        
+                        if audioHandler.timerIsActive {
+                            if audioHandler.timerSeconds%60 < 10 {
+                                Text("\(audioHandler.timerSeconds/60):0\(audioHandler.timerSeconds%60)")
+                                    .font(Font.system(.caption, design: .monospaced))
+                            } else {
+                                Text("\(audioHandler.timerSeconds/60):\(audioHandler.timerSeconds%60)")
+                                    .font(Font.system(.caption, design: .monospaced))
+                            }
+                        }
                     }
-                    if timerIsRunning {
-                        Text("0:30")
-                            .font(Font.system(.caption, design: .monospaced))
-                    }
+                        
+//                        Button {
+//                            showTimerPopover = false
+//                            audioHandler.setTimer(seconds: audioHandler.timerSeconds)
+//                        } label: {
+//                            Text("Set")
+//                        }
+//                        .padding()
                 }
+                .padding()
                 
                 // playback controls
                 HStack {

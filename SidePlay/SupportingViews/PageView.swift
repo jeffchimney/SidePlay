@@ -17,14 +17,16 @@ struct PageView: View {
     
     var body: some View {
         TabView {
-            AsyncImage(imageLastPathComponent: imageLastPathComponent)
-                .clipShape(RoundedRectangle(cornerRadius: 15))
-                .padding()
-            
-//            Image(uiImage: UIImage(contentsOfFile: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(imageLastPathComponent).path)!)
-//                .resizable()
-//                .clipShape(RoundedRectangle(cornerRadius: 15))
-//                .padding()
+            if imageLastPathComponent == ""  {
+                AsyncImage(imageLastPathComponent: imageLastPathComponent)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .padding()
+            } else {
+                Image(uiImage: UIImage(contentsOfFile: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(imageLastPathComponent).path) ?? UIImage())
+                    .resizable()
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .padding()
+            }
             
             TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!)
         }

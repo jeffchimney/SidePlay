@@ -9,11 +9,14 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var isPlaying: Bool = false
     @Published var isShowingPlayer: Bool = false
     @Published var currentlyPlayingTrack: Track?
+    @Published var timerIsActive: Bool = false
+    @Published var timerSeconds: Int = 0
 
     var audioPlayer = AVAudioPlayer()
     var fileName = ""
     var playlist: Playlist?
     var viewContext: NSManagedObjectContext?
+    var timer: Timer?
 
     override init() {
         super.init()
@@ -248,5 +251,32 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         audioPlayer.currentTime = time
         
         return MPRemoteCommandHandlerStatus.success
+    }
+    
+    func setTimer(seconds: Int) {
+        timerSeconds = seconds
+        timerIsActive = true
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.decrementTimer), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        timerSeconds = 0
+        timerIsActive = false
+        if timer != nil {
+            timer!.invalidate()
+        }
+    }
+    
+    @objc func decrementTimer() {
+        if timerIsActive {
+            timerSeconds -= 1
+            
+            // check if we should stop the timer
+            if timerSeconds <= 0 {
+                pause()
+                stopTimer()
+            }
+        }
     }
 }
