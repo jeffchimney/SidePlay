@@ -71,7 +71,7 @@ struct PlaylistCard: View {
                                         fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                                     }
                                 }
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                                 .font(.headline)
                                 .autocapitalization(UITextAutocapitalizationType.words)
                                 .padding(.bottom, 5)

@@ -157,6 +157,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         
         currentlyPlayingTrack = track
         playlist = track.playlist
+        currentlyPlayingTrack?.playlist?.lastPlayedTrack = currentlyPlayingTrack?.uuid
 
         print("Looking for \(audioUrl)")
         // to check if it exists before downloading it
@@ -198,6 +199,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isPlaying = true
         audioPlayer.play()
         setupNowPlaying()
+        currentlyPlayingTrack?.playlist?.lastPlayedTrack = currentlyPlayingTrack?.uuid
     }
     
     func pause() {
@@ -205,6 +207,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isPlaying = false
         audioPlayer.pause()
         currentlyPlayingTrack?.progress = audioPlayer.currentTime.magnitude
+        currentlyPlayingTrack?.playlist?.lastPlayedTrack = currentlyPlayingTrack?.uuid
         
         do {
             try viewContext!.save()

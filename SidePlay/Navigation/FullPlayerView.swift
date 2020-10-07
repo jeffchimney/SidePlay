@@ -158,9 +158,11 @@ struct FullPlayerView: View {
                             if audioHandler.timerSeconds%60 < 10 {
                                 Text("\(audioHandler.timerSeconds/60):0\(audioHandler.timerSeconds%60)")
                                     .font(Font.system(.caption, design: .monospaced))
+                                    .foregroundColor(.elementColor)
                             } else {
                                 Text("\(audioHandler.timerSeconds/60):\(audioHandler.timerSeconds%60)")
                                     .font(Font.system(.caption, design: .monospaced))
+                                    .foregroundColor(.elementColor)
                             }
                         }
                     }

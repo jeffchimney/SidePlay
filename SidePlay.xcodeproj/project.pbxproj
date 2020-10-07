@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE0FE12A250DC12D00C9B7D8 /* DownloadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0FE129250DC12D00C9B7D8 /* DownloadingView.swift */; };
 		BE0FE12C250DDA4C00C9B7D8 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */; };
 		BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */; };
 		BE179E27252C284100266B67 /* SetTimerPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE179E26252C284100266B67 /* SetTimerPopover.swift */; };
@@ -61,7 +60,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BE0FE129250DC12D00C9B7D8 /* DownloadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingView.swift; sourceTree = "<group>"; };
 		BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCard.swift; sourceTree = "<group>"; };
 		BE179E26252C284100266B67 /* SetTimerPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTimerPopover.swift; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 			isa = PBXGroup;
 			children = (
 				BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */,
-				BE0FE129250DC12D00C9B7D8 /* DownloadingView.swift */,
 				BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */,
 				BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */,
 				BEE3D1FD251946640040D8F7 /* TrackListView.swift */,
@@ -418,7 +415,6 @@
 				BEB4963925285AFA00990DE3 /* AirplayView.swift in Sources */,
 				BEB74C362508797C0035FEC1 /* Persistence.swift in Sources */,
 				BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */,
-				BE0FE12A250DC12D00C9B7D8 /* DownloadingView.swift in Sources */,
 				BEB74C2F2508797B0035FEC1 /* ContentView.swift in Sources */,
 				BEE3D2002519AB8E0040D8F7 /* TrackListRowView.swift in Sources */,
 				BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */,
