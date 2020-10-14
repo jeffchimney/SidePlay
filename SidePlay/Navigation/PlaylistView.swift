@@ -13,12 +13,45 @@ struct PlaylistView: View {
     @EnvironmentObject var audioHandler: AudioHandler
     
     @State private var showFilePicker = false
+    @State private var isDownloading: Bool = false
+    @State private var downloadProgress: Int = 0
+    @State private var downloadTotal: Int = 10
+    @State private var percentDownloaded: Double = 0.0
     
     @ObservedObject var playlist: Playlist
     
     var body: some View {
         ZStack {
             VStack {
+                if isDownloading {
+                    GeometryReader { geometry in
+                        VStack {
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .foregroundColor(Color.gray)
+                                    .opacity(0.3)
+                                    .frame(width: geometry.size.width, height: 10)
+                                Rectangle()
+                                    .foregroundColor(Color.buttonGradientEnd)
+                                    .frame(width: geometry.size.width * CGFloat((percentDownloaded)),
+                                           height: 10)
+                                    .animation(.linear(duration: 0.5))
+                            }
+                            .cornerRadius(10 / 2.0)
+                            HStack {
+                                Text("\(downloadProgress)")
+                                    .font(.caption)
+                                Spacer()
+                                Text("of")
+                                    .font(.caption)
+                                Spacer()
+                                Text("\(downloadTotal)")
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    .padding()
+                }
                 if playlist.trackArray.count > 0 {
                     Button {
                         withAnimation {
@@ -119,6 +152,7 @@ struct PlaylistView: View {
                 
                 if ((uti?.conforms(to: UTType.audio)) == true) {
                     if chapters.count != 0 {
+                        self.downloadTotal = chapters.count
                         let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
                         // lets create your destination file url
                         let fullFileDestinationUrl = documentsDirectoryURL.appendingPathComponent(UUID().uuidString + ".caf")
@@ -176,6 +210,15 @@ struct PlaylistView: View {
                                         
                                         DispatchQueue.main.async {
                                             print("Downloaded \(counter)")
+                                            withAnimation {
+                                                self.isDownloading = true
+                                                self.downloadProgress = counter-1
+                                                self.percentDownloaded = Double(self.downloadProgress) / Double(downloadTotal)
+                                                
+                                                if self.downloadProgress >= self.downloadTotal {
+                                                    self.isDownloading = false
+                                                }
+                                            }
                                             do {
                                                 try viewContext.save()
                                             } catch {
@@ -189,6 +232,9 @@ struct PlaylistView: View {
                             })
                         }
                     } else {
+                        self.downloadTotal = sortedUrls.count
+                        self.downloadProgress = counter
+                        self.percentDownloaded = Double(self.downloadProgress) / Double(downloadTotal)
                         // then lets create your document folder url
                         let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 

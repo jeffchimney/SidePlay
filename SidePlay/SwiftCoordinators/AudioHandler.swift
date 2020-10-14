@@ -24,12 +24,52 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         audioPlayer.delegate = self
     }
     
+    func setupNotifications() {
+        // Get the default notification center instance.
+        let nc = NotificationCenter.default
+        nc.addObserver(self,
+                       selector: #selector(handleInterruption),
+                       name: AVAudioSession.interruptionNotification,
+                       object: nil)
+    }
+
+    @objc func handleInterruption(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+            let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue) else {
+                return
+        }
+
+        // Switch over the interruption type.
+        switch type {
+
+        case .began:
+            // An interruption began. Update the UI as needed.
+            self.isPlaying = false
+        case .ended:
+           // An interruption ended. Resume playback, if appropriate.
+
+            guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+            if options.contains(.shouldResume) {
+                // Interruption ended. Playback should resume.
+                self.play()
+            } else {
+                // Interruption ended. Playback should not resume.
+                self.pause()
+            }
+
+        default: ()
+        }
+    }
+    
     func setupRemoteTransportControls() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
             print("Playback OK")
             try AVAudioSession.sharedInstance().setActive(true)
             print("Session is Active")
+            setupNotifications()
         } catch {
             print(error)
         }
@@ -101,6 +141,8 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     func playNextTrackInPlaylist() {
         if let unwrappedPlaylist = playlist {
             var hasFoundCurrentTrack = false
+            var trackCount = 0
+            let totalTracks = unwrappedPlaylist.trackArray.count
             for track in unwrappedPlaylist.trackArray.sorted(by: { $0.wrappedName < $1.wrappedName }) {
                 // if we are caught up to the track we just played, and it hasnt yet been played
                 if hasFoundCurrentTrack {
@@ -111,6 +153,24 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 
                 if track.wrappedName == currentlyPlayingTrack?.wrappedName {
                     hasFoundCurrentTrack = true
+                }
+                trackCount += 1
+                print("track count \(trackCount) totalTracks \(totalTracks)")
+            }
+            
+            if hasFoundCurrentTrack && trackCount == totalTracks {
+                withAnimation {
+                    self.isShowingPlayer = false
+                }
+                unwrappedPlaylist.favorite = false
+                
+                do {
+                    try viewContext!.save()
+                } catch {
+                    // Replace this implementation with code to handle the error appropriately.
+                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                    let nsError = error as NSError
+                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                 }
             }
         }
@@ -157,6 +217,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
         
         currentlyPlayingTrack = track
         playlist = track.playlist
+        playlist!.favorite = true
         currentlyPlayingTrack?.playlist?.lastPlayedTrack = currentlyPlayingTrack?.uuid
 
         print("Looking for \(audioUrl)")
@@ -179,20 +240,16 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 }).resume()
             }
         }
+        
+        do {
+            try viewContext!.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
     }
-    
-    
-//    func resumePlaylist(track: Track) {
-//        if let unwrappedPlaylist = playlist {
-//            for track in unwrappedPlaylist.trackArray {
-//                // if we are caught up to the track we just played, and it hasnt yet been played
-//                if track.played == false {
-//                    playTrack(track: track)
-//                    break
-//                }
-//            }
-//        }
-//    }
     
     func play() {
         audioPlayer.rate = 1.0

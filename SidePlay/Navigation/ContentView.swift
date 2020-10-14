@@ -32,7 +32,7 @@ struct ContentView: View {
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Playlist.lastPlayed, ascending: false)
         ],
-        predicate: NSPredicate(format: "lastPlayed >= %@", NSDate().addingTimeInterval(-604800)), // last played at least one week ago
+        predicate: NSPredicate(format: "lastPlayed >= %@ and favorite == true", NSDate().addingTimeInterval(-604800)), // last played at least one week ago
         animation: .default)
     private var recentlyPlayed: FetchedResults<Playlist>
     
@@ -49,13 +49,14 @@ struct ContentView: View {
                                     Rectangle()
                                         .foregroundColor(Color.gray)
                                         .opacity(0.3)
-                                        .frame(width: geometry.size.width, height: geometry.size.height)
+                                        .frame(width: geometry.size.width, height: 10)
                                     Rectangle()
                                         .foregroundColor(Color.buttonGradientEnd)
                                         .frame(width: geometry.size.width * CGFloat((percentDownloaded)),
-                                               height: geometry.size.height)
+                                               height: 10)
                                         .animation(.linear(duration: 0.5))
                                 }
+                                .cornerRadius(10 / 2.0)
                                 HStack {
                                     Text("\(downloadProgress)")
                                         .font(.caption)
@@ -67,7 +68,6 @@ struct ContentView: View {
                                         .font(.caption)
                                 }
                             }
-                            .cornerRadius(geometry.size.height / 2.0)
                         }
                         .padding()
                     }

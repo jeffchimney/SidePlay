@@ -100,22 +100,6 @@ struct FullPlayerView: View {
                 
                 // Sleep timer button
                 HStack {
-//                    Button {
-//                        showTimerPopover = true
-//                    } label: {
-//                        Image(systemName: "timer")
-//                            .imageScale(.medium)
-//                            .font(.body)
-//                            .foregroundColor(.buttonGradientEnd)
-//                    }
-                    
-//                    Picker(selection: $audioHandler.timerSeconds, label: Text("Set timer for")) {
-//                        Text("0:15").tag(900)
-//                        Text("0:30").tag(1800)
-//                        Text("0:45").tag(2700)
-//                        Text("1:00").tag(3600)
-//                    }.pickerStyle(MenuPickerStyle())
-                    
                     Menu {
                         if audioHandler.timerIsActive {
                             Button(action: {

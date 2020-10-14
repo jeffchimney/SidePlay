@@ -46,6 +46,7 @@ struct PlayerView: View {
 //                .foregroundColor(.elementColor)
 //                .padding()
         }
+        .contentShape(Rectangle())
         .onTapGesture {
             self.showFullPlayer.toggle()
         }
