@@ -69,6 +69,7 @@ struct ContentView: View {
                                 }
                             }
                         }
+                        .frame(height: 25)
                         .padding()
                     }
                     LazyVStack {

@@ -50,6 +50,7 @@ struct PlaylistView: View {
                             }
                         }
                     }
+                    .frame(height: 25)
                     .padding()
                 }
                 if playlist.trackArray.count > 0 {
