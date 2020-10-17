@@ -108,25 +108,16 @@ struct ContentView: View {
                         }
                         if showAddPlayist {
                             PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
+                                .environment(\.managedObjectContext, viewContext)
+                                .environmentObject(audioHandler)
                                 //.animation(nil)
                                 .padding([.leading, .trailing, .top])
                         }
                         ForEach(playlists) { playlist in
-                            VStack {
-                                NavigationLink(
-                                    destination:
-                                        PlaylistView(playlist: playlist)
-                                            .environment(\.managedObjectContext, viewContext)
-                                            .environmentObject(audioHandler),
-                                    label: {
-                                        PlaylistCard(playlist: playlist, showAddPlayist: $showAddPlayist)
-                                            .environment(\.managedObjectContext, viewContext)
-                                            .environmentObject(audioHandler)
-                                            //.animation(nil)
-                                    }
-                                )
-                            }
-                            .padding([.leading, .trailing, .top])
+                            SwipableCardWithButtons(playlist: playlist, showAddPlayist: $showAddPlayist)
+                                .environment(\.managedObjectContext, viewContext)
+                                .environmentObject(audioHandler)
+                                .padding([.leading, .trailing, .top])
                         }
 
                     }
