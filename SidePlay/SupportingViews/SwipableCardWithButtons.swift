@@ -20,6 +20,7 @@ struct SwipableCardWithButtons: View {
     @State private var navigationIsActive = true
     @State private var swipeLeftShouldStick = false
     @State private var swipeRightShouldStick = false
+    @State private var isEditingPlaylist = false
     
     @Binding var showAddPlayist: Bool
     
@@ -30,23 +31,30 @@ struct SwipableCardWithButtons: View {
                 // play button to continue listening to playlist
                 Button(action: {
                     // play
-                    print("play button pushed")
+                    withAnimation {
+                        audioHandler.isShowingPlayer = true
+                    }
+                    audioHandler.playlist = playlist
+                    audioHandler.playFromWhereWeLeftOff()
                 }, label: {
                     Image(systemName: "play.circle.fill")
                         .imageScale(.medium)
                         .font(.headline)
                         .foregroundColor(.buttonGradientEnd)
                 })
-                .highPriorityGesture(TapGesture())
                 .opacity(offsetDirection == .right ? 1 : 0)
                 .transition(.move(edge: .leading))
                 .padding()
+                
                 Spacer()
                 
                 // Edit Playlist button
                 Button(action: {
                     // edit
                     print("edit button pushed")
+                    isEditingPlaylist = true
+                    offset = .zero
+                    offsetDirection = .center
                 }, label: {
                     Image(systemName: "pencil.circle")
                         .imageScale(.medium)
@@ -61,6 +69,31 @@ struct SwipableCardWithButtons: View {
                 Button(action: {
                     // delete
                     print("delete button pushed")
+                    
+                    for track in playlist.trackArray {
+                        let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+                        // lets create your destination file url
+                        let audioFileUrl = documentsDirectoryURL.appendingPathComponent(track.url!.lastPathComponent)
+                        // delete full track after splitting into pieces
+                        do {
+                            // after downloading your file you need to move it to your destination url
+                            try FileManager.default.removeItem(at: audioFileUrl)
+                        } catch let error as NSError {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    
+                    viewContext.delete(playlist)
+                    
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        // Replace this implementation with code to handle the error appropriately.
+                        // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                    }
                 }, label: {
                     Image(systemName: "trash")
                         .imageScale(.medium)
@@ -73,12 +106,12 @@ struct SwipableCardWithButtons: View {
             }
             
             // Playlist Card
-            PlaylistCard(playlist: playlist, showAddPlayist: .constant(false))
+            PlaylistCard(playlist: playlist, showAddPlayist: $isEditingPlaylist, isEditingExistingPlaylist: $isEditingPlaylist)
                 .environment(\.managedObjectContext, viewContext)
                 .environmentObject(audioHandler)
                 .background(Color.backgroundColor)
-                .offset(x: offset.width, y: 0)
                 .contentShape(Rectangle())
+                .offset(x: offset.width, y: 0)
                 .highPriorityGesture(
                     DragGesture()
                         .onChanged { gesture in
@@ -132,6 +165,6 @@ enum OffsetDirection {
 
 struct SwipableCardWithButtons_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistCard(playlist: Playlist(), showAddPlayist: .constant(true))
+        PlaylistCard(playlist: Playlist(), showAddPlayist: .constant(true), isEditingExistingPlaylist: .constant(false))
     }
 }

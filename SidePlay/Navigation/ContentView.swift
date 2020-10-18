@@ -107,10 +107,9 @@ struct ContentView: View {
                                 Spacer()
                         }
                         if showAddPlayist {
-                            PlaylistCard(playlist: Playlist(), isEditing: true, showAddPlayist: $showAddPlayist)
+                            NewPlaylistCard(playlist: Playlist(), showAddPlayist: $showAddPlayist)
                                 .environment(\.managedObjectContext, viewContext)
                                 .environmentObject(audioHandler)
-                                //.animation(nil)
                                 .padding([.leading, .trailing, .top])
                         }
                         ForEach(playlists) { playlist in
@@ -267,6 +266,15 @@ struct ContentView: View {
                                         }
                                 }
                             })
+                        }
+                        
+                        // delete full track after splitting into pieces
+                        do {
+                            // after downloading your file you need to move it to your destination url
+                            try FileManager.default.removeItem(at: fullFileDestinationUrl)
+                            print("Full file deleted from storage")
+                        } catch let error as NSError {
+                            print(error.localizedDescription)
                         }
                     } else {
                         self.downloadTotal = sortedUrls.count

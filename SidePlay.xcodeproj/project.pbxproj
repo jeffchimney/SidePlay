@@ -37,6 +37,16 @@
 		BEB74C442508797C0035FEC1 /* SidePlayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C432508797C0035FEC1 /* SidePlayTests.swift */; };
 		BEB74C4F2508797C0035FEC1 /* SidePlayUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C4E2508797C0035FEC1 /* SidePlayUITests.swift */; };
 		BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */; };
+		BEBD81B4253BDE1D003FB72B /* NewPlaylistCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD81B3253BDE1D003FB72B /* NewPlaylistCard.swift */; };
+		BEBD8200253BE263003FB72B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEBD81C0253BE0E9003FB72B /* WidgetKit.framework */; };
+		BEBD8201253BE263003FB72B /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEBD81C2253BE0E9003FB72B /* SwiftUI.framework */; };
+		BEBD8204253BE263003FB72B /* SidePlayWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8203253BE263003FB72B /* SidePlayWidget.swift */; };
+		BEBD8206253BE264003FB72B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEBD8205253BE264003FB72B /* Assets.xcassets */; };
+		BEBD820A253BE264003FB72B /* SidePlayWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BEBD81FF253BE263003FB72B /* SidePlayWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		BEBD8214253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */; };
+		BEBD8215253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */; };
+		BEBD821F253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */; };
+		BEBD8220253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */; };
 		BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */; };
 		BED752C525096BE800C79F76 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
 		BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE3D1FD251946640040D8F7 /* TrackListView.swift */; };
@@ -58,7 +68,28 @@
 			remoteGlobalIDString = BEB74C282508797B0035FEC1;
 			remoteInfo = SidePlay;
 		};
+		BEBD8208253BE264003FB72B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BEB74C212508797B0035FEC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BEBD81FE253BE263003FB72B;
+			remoteInfo = SidePlayWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BEBD81D3253BE0EB003FB72B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				BEBD820A253BE264003FB72B /* SidePlayWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
@@ -97,6 +128,15 @@
 		BEB74C4E2508797C0035FEC1 /* SidePlayUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePlayUITests.swift; sourceTree = "<group>"; };
 		BEB74C502508797C0035FEC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEB74C5C250879DC0035FEC1 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		BEBD81B3253BDE1D003FB72B /* NewPlaylistCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaylistCard.swift; sourceTree = "<group>"; };
+		BEBD81C0253BE0E9003FB72B /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		BEBD81C2253BE0E9003FB72B /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		BEBD81FF253BE263003FB72B /* SidePlayWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SidePlayWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEBD8203253BE263003FB72B /* SidePlayWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePlayWidget.swift; sourceTree = "<group>"; };
+		BEBD8205253BE264003FB72B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BEBD8207253BE264003FB72B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetContents.swift; sourceTree = "<group>"; };
+		BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetView.swift; sourceTree = "<group>"; };
 		BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		BED752C225096BD900C79F76 /* SidePlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlay.entitlements; sourceTree = "<group>"; };
 		BED752C425096BE800C79F76 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -124,6 +164,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BEBD81FC253BE263003FB72B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEBD8201253BE263003FB72B /* SwiftUI.framework in Frameworks */,
+				BEBD8200253BE263003FB72B /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +216,7 @@
 			children = (
 				BE9C711D250D2B0A0053FBB7 /* PlaylistCard.swift */,
 				BE1FDFA6253A9A8700921DA5 /* SwipableCardWithButtons.swift */,
+				BEBD81B3253BDE1D003FB72B /* NewPlaylistCard.swift */,
 				BE0FE12B250DDA4C00C9B7D8 /* ProgressBar.swift */,
 				BE0FE12D250E9B5E00C9B7D8 /* ImportCard.swift */,
 				BEE3D1FD251946640040D8F7 /* TrackListView.swift */,
@@ -197,6 +247,7 @@
 				BEB74C2B2508797B0035FEC1 /* SidePlay */,
 				BEB74C422508797C0035FEC1 /* SidePlayTests */,
 				BEB74C4D2508797C0035FEC1 /* SidePlayUITests */,
+				BEBD8202253BE263003FB72B /* SidePlayWidget */,
 				BEB74C2A2508797B0035FEC1 /* Products */,
 				BED752C325096BE800C79F76 /* Frameworks */,
 			);
@@ -208,6 +259,7 @@
 				BEB74C292508797B0035FEC1 /* SidePlay.app */,
 				BEB74C3F2508797C0035FEC1 /* SidePlayTests.xctest */,
 				BEB74C4A2508797C0035FEC1 /* SidePlayUITests.xctest */,
+				BEBD81FF253BE263003FB72B /* SidePlayWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -221,6 +273,7 @@
 				BE9C711F250D2FEB0053FBB7 /* Navigation */,
 				BE9C7120250D30040053FBB7 /* SwiftCoordinators */,
 				BE9C7121250D30310053FBB7 /* SupportingViews */,
+				BEBD8212253BE3E3003FB72B /* Widgets */,
 				BED752C225096BD900C79F76 /* SidePlay.entitlements */,
 				BEB74C302508797C0035FEC1 /* Assets.xcassets */,
 				BEB74C352508797C0035FEC1 /* Persistence.swift */,
@@ -257,10 +310,31 @@
 			path = SidePlayUITests;
 			sourceTree = "<group>";
 		};
+		BEBD8202253BE263003FB72B /* SidePlayWidget */ = {
+			isa = PBXGroup;
+			children = (
+				BEBD8203253BE263003FB72B /* SidePlayWidget.swift */,
+				BEBD8205253BE264003FB72B /* Assets.xcassets */,
+				BEBD8207253BE264003FB72B /* Info.plist */,
+			);
+			path = SidePlayWidget;
+			sourceTree = "<group>";
+		};
+		BEBD8212253BE3E3003FB72B /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */,
+				BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 		BED752C325096BE800C79F76 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				BED752C425096BE800C79F76 /* CloudKit.framework */,
+				BEBD81C0253BE0E9003FB72B /* WidgetKit.framework */,
+				BEBD81C2253BE0E9003FB72B /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -275,10 +349,12 @@
 				BEB74C252508797B0035FEC1 /* Sources */,
 				BEB74C262508797B0035FEC1 /* Frameworks */,
 				BEB74C272508797B0035FEC1 /* Resources */,
+				BEBD81D3253BE0EB003FB72B /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BEBD8209253BE264003FB72B /* PBXTargetDependency */,
 			);
 			name = SidePlay;
 			productName = SidePlay;
@@ -321,6 +397,23 @@
 			productReference = BEB74C4A2508797C0035FEC1 /* SidePlayUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		BEBD81FE253BE263003FB72B /* SidePlayWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BEBD820B253BE264003FB72B /* Build configuration list for PBXNativeTarget "SidePlayWidgetExtension" */;
+			buildPhases = (
+				BEBD81FB253BE263003FB72B /* Sources */,
+				BEBD81FC253BE263003FB72B /* Frameworks */,
+				BEBD81FD253BE263003FB72B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SidePlayWidgetExtension;
+			productName = SidePlayWidgetExtension;
+			productReference = BEBD81FF253BE263003FB72B /* SidePlayWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -341,6 +434,9 @@
 						CreatedOnToolsVersion = 12.0;
 						TestTargetID = BEB74C282508797B0035FEC1;
 					};
+					BEBD81FE253BE263003FB72B = {
+						CreatedOnToolsVersion = 12.0.1;
+					};
 				};
 			};
 			buildConfigurationList = BEB74C242508797B0035FEC1 /* Build configuration list for PBXProject "SidePlay" */;
@@ -359,6 +455,7 @@
 				BEB74C282508797B0035FEC1 /* SidePlay */,
 				BEB74C3E2508797C0035FEC1 /* SidePlayTests */,
 				BEB74C492508797C0035FEC1 /* SidePlayUITests */,
+				BEBD81FE253BE263003FB72B /* SidePlayWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -387,6 +484,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BEBD81FD253BE263003FB72B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEBD8206253BE264003FB72B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -399,6 +504,7 @@
 				BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */,
 				BEB74C392508797C0035FEC1 /* SidePlay.xcdatamodeld in Sources */,
 				BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */,
+				BEBD8214253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */,
 				BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */,
 				BEB65F772522A45B009CC379 /* AsyncImage.swift in Sources */,
 				BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */,
@@ -421,7 +527,9 @@
 				BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */,
 				BEB74C2F2508797B0035FEC1 /* ContentView.swift in Sources */,
 				BEE3D2002519AB8E0040D8F7 /* TrackListRowView.swift in Sources */,
+				BEBD821F253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */,
 				BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */,
+				BEBD81B4253BDE1D003FB72B /* NewPlaylistCard.swift in Sources */,
 				BEB74C2D2508797B0035FEC1 /* SidePlayApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +550,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BEBD81FB253BE263003FB72B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEBD8220253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */,
+				BEBD8204253BE263003FB72B /* SidePlayWidget.swift in Sources */,
+				BEBD8215253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -454,6 +572,11 @@
 			isa = PBXTargetDependency;
 			target = BEB74C282508797B0035FEC1 /* SidePlay */;
 			targetProxy = BEB74C4B2508797C0035FEC1 /* PBXContainerItemProxy */;
+		};
+		BEBD8209253BE264003FB72B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BEBD81FE253BE263003FB72B /* SidePlayWidgetExtension */;
+			targetProxy = BEBD8208253BE264003FB72B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -577,6 +700,7 @@
 		BEB74C542508797C0035FEC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SidePlay/SidePlay.entitlements;
@@ -600,6 +724,7 @@
 		BEB74C552508797C0035FEC1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SidePlay/SidePlay.entitlements;
@@ -704,6 +829,48 @@
 			};
 			name = Release;
 		};
+		BEBD820C253BE264003FB72B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JSZY8AYXNH;
+				INFOPLIST_FILE = SidePlayWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay.SidePlayWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BEBD820D253BE264003FB72B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JSZY8AYXNH;
+				INFOPLIST_FILE = SidePlayWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay.SidePlayWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -739,6 +906,15 @@
 			buildConfigurations = (
 				BEB74C5A2508797C0035FEC1 /* Debug */,
 				BEB74C5B2508797C0035FEC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BEBD820B253BE264003FB72B /* Build configuration list for PBXNativeTarget "SidePlayWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEBD820C253BE264003FB72B /* Debug */,
+				BEBD820D253BE264003FB72B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

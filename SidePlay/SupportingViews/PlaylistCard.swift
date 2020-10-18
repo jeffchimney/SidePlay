@@ -16,11 +16,8 @@ struct PlaylistCard: View {
     var isEditing: Bool = false
     @State private var newPlaylistName: String = ""
     
-    var colors: [Colors] = [
-        Colors(color: Color.blueColor), Colors(color: Color.greenColor), Colors(color: Color.yellowColor), Colors(color: Color.redColor)
-    ]
-    
     @Binding var showAddPlayist: Bool
+    @Binding var isEditingExistingPlaylist: Bool
     
     var body: some View {
         // Playlist Card
@@ -43,12 +40,33 @@ struct PlaylistCard: View {
                 
                 VStack(alignment: .leading) {
                     if !isEditing {
-                        Text(playlist.wrappedName)
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .lineLimit(2)
-                            .padding(.bottom, 5)
-                            .foregroundColor(.primary)
+                        if isEditingExistingPlaylist {
+                            TextField(playlist.wrappedName, text: $newPlaylistName) { (result) in }
+                                onCommit: {
+                                    playlist.name = newPlaylistName
+
+                                    self.showAddPlayist = false
+                                    
+                                    do {
+                                        try viewContext.save()
+                                    } catch {
+                                        let nsError = error as NSError
+                                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                                    }
+                                }
+                                .highPriorityGesture(TapGesture())
+                                .foregroundColor(.primary)
+                                .font(.headline)
+                                .autocapitalization(UITextAutocapitalizationType.words)
+                                .padding(.bottom, 5)
+                        } else {
+                            Text(playlist.wrappedName)
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .lineLimit(2)
+                                .padding(.bottom, 5)
+                                .foregroundColor(.primary)
+                        }
                         Text("Contains \(playlist.trackArray.count) items".uppercased())
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -85,7 +103,17 @@ struct PlaylistCard: View {
                     }
                 }
                 .padding(.horizontal, 5)
- 
+                
+                if isEditingExistingPlaylist {
+                    Button(action: {
+                        isEditingExistingPlaylist.toggle()
+                    }, label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.body)
+                            .foregroundColor(.red)
+                    })
+                }
+                
                 Spacer()
             }
         }
@@ -99,6 +127,6 @@ struct Colors: Identifiable {
 
 struct PlaylistCard_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistCard(playlist: Playlist(), showAddPlayist: .constant(true))
+        PlaylistCard(playlist: Playlist(), showAddPlayist: .constant(true), isEditingExistingPlaylist: .constant(true))
     }
 }
