@@ -3,6 +3,7 @@ import SwiftUI
 import AVFoundation
 import CoreData
 import MediaPlayer
+import WidgetKit
 
 class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
@@ -183,28 +184,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
             for track in sortedPlaylist {
                 // if we are caught up to the track we just played, and it hasnt yet been played
                 if track.uuid == unwrappedPlaylist.lastPlayedTrack {
-                    let audioUrl = track.wrappedURL
-                    let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-                    let calculatedAudioURL = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
-                    if FileManager.default.fileExists(atPath: calculatedAudioURL.path) {
-                        currentlyPlayingTrack = track
-                        playlist = track.playlist
-                        
-                        print("The file found at path")
-                        do {
-                            URLSession.shared.downloadTask(with: calculatedAudioURL, completionHandler: { (location, response, error) -> Void in
-                                guard let location = location, error == nil else { return }
-                                do {
-                                    try self.audioPlayer = AVAudioPlayer(contentsOf: location)
-                                    self.audioPlayer.delegate = self
-                                    self.audioPlayer.currentTime = track.progress
-                                    self.audioPlayer.play()
-                                    self.setupNowPlaying()
-                                } catch { print("Error \(error)") }
-
-                            }).resume()
-                        }
-                    }
+                    playTrack(track: track)
                     break
                 }
             }
@@ -238,6 +218,28 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                     } catch { print("Error \(error)") }
 
                 }).resume()
+                
+                let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let imageUrl = documentsDirectoryURL.appendingPathComponent(playlist!.wrappedImageLastPathComponent)
+
+                let sharedDirectoryURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: const.APP_GROUP)
+                let sharedDestinationURL = sharedDirectoryURL!.appendingPathComponent(playlist!.wrappedImageLastPathComponent)
+                do {
+                    // after downloading your file you need to move it to your destination url
+                    try FileManager.default.copyItem(at: imageUrl, to: sharedDestinationURL)
+                    print("Image file moved to shared documents folder")
+                } catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+                
+                let defaults = UserDefaults.init(suiteName: const.APP_GROUP)
+                defaults!.set(currentlyPlayingTrack?.wrappedName ?? "", forKey: "trackName")
+                defaults!.set(playlist?.wrappedName ?? "", forKey: "playlistName")
+                defaults!.set(playlist?.wrappedImageLastPathComponent ?? "", forKey: "imageLastPathComponent")
+                defaults!.set(((playlist?.trackArray.firstIndex(of: currentlyPlayingTrack!))! + 1), forKey: "trackNumber")
+                defaults!.set(playlist?.trackArray.count ?? "", forKey: "totalTracks")
+                
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
         

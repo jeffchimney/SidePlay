@@ -12,6 +12,17 @@
 		BE179E27252C284100266B67 /* SetTimerPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE179E26252C284100266B67 /* SetTimerPopover.swift */; };
 		BE1FDFA7253A9A8700921DA5 /* SwipableCardWithButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1FDFA6253A9A8700921DA5 /* SwipableCardWithButtons.swift */; };
 		BE32221C251F04ED00F0C545 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE32221B251F04ED00F0C545 /* FloatingMenu.swift */; };
+		BE349D1D253E13EA00655BA5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
+		BE349D2E253E1D0300655BA5 /* SidePlay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C372508797C0035FEC1 /* SidePlay.xcdatamodeld */; };
+		BE349D33253E1D4E00655BA5 /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80482509D4C700C489DD /* Track+CoreDataProperties.swift */; };
+		BE349D34253E1D4E00655BA5 /* Playlist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80462509D4C700C489DD /* Playlist+CoreDataProperties.swift */; };
+		BE349D35253E1D4E00655BA5 /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80452509D4C700C489DD /* Playlist+CoreDataClass.swift */; };
+		BE349D36253E1D4E00655BA5 /* Track+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80472509D4C700C489DD /* Track+CoreDataClass.swift */; };
+		BE349D44253E280700655BA5 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB74C352508797C0035FEC1 /* Persistence.swift */; };
+		BE349D4A253E2E7000655BA5 /* const.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE349D49253E2E7000655BA5 /* const.swift */; };
+		BE349D4F253E2EDF00655BA5 /* const.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE349D49253E2E7000655BA5 /* const.swift */; };
+		BE349D6C253E3DF200655BA5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A804F2509DBBD00C489DD /* Extensions.swift */; };
+		BE349D71253E3E2A00655BA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEB74C302508797C0035FEC1 /* Assets.xcassets */; };
 		BE3A80432509D1D900C489DD /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80422509D1D900C489DD /* PlaylistView.swift */; };
 		BE3A80492509D4C700C489DD /* Playlist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80452509D4C700C489DD /* Playlist+CoreDataClass.swift */; };
 		BE3A804A2509D4C700C489DD /* Playlist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80462509D4C700C489DD /* Playlist+CoreDataProperties.swift */; };
@@ -43,10 +54,6 @@
 		BEBD8204253BE263003FB72B /* SidePlayWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8203253BE263003FB72B /* SidePlayWidget.swift */; };
 		BEBD8206253BE264003FB72B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEBD8205253BE264003FB72B /* Assets.xcassets */; };
 		BEBD820A253BE264003FB72B /* SidePlayWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BEBD81FF253BE263003FB72B /* SidePlayWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		BEBD8214253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */; };
-		BEBD8215253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */; };
-		BEBD821F253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */; };
-		BEBD8220253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */; };
 		BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */; };
 		BED752C525096BE800C79F76 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED752C425096BE800C79F76 /* CloudKit.framework */; };
 		BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE3D1FD251946640040D8F7 /* TrackListView.swift */; };
@@ -97,6 +104,8 @@
 		BE179E26252C284100266B67 /* SetTimerPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTimerPopover.swift; sourceTree = "<group>"; };
 		BE1FDFA6253A9A8700921DA5 /* SwipableCardWithButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipableCardWithButtons.swift; sourceTree = "<group>"; };
 		BE32221B251F04ED00F0C545 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
+		BE349D18253E087F00655BA5 /* SidePlayWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlayWidgetExtension.entitlements; sourceTree = "<group>"; };
+		BE349D49253E2E7000655BA5 /* const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = const.swift; sourceTree = "<group>"; };
 		BE3A80422509D1D900C489DD /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
 		BE3A80452509D4C700C489DD /* Playlist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BE3A80462509D4C700C489DD /* Playlist+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playlist+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -135,8 +144,6 @@
 		BEBD8203253BE263003FB72B /* SidePlayWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidePlayWidget.swift; sourceTree = "<group>"; };
 		BEBD8205253BE264003FB72B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BEBD8207253BE264003FB72B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetContents.swift; sourceTree = "<group>"; };
-		BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingWidgetView.swift; sourceTree = "<group>"; };
 		BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		BED752C225096BD900C79F76 /* SidePlay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SidePlay.entitlements; sourceTree = "<group>"; };
 		BED752C425096BE800C79F76 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -171,6 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE349D1D253E13EA00655BA5 /* CloudKit.framework in Frameworks */,
 				BEBD8201253BE263003FB72B /* SwiftUI.framework in Frameworks */,
 				BEBD8200253BE263003FB72B /* WidgetKit.framework in Frameworks */,
 			);
@@ -237,6 +245,7 @@
 				BE3A804F2509DBBD00C489DD /* Extensions.swift */,
 				BEB65F702522A40A009CC379 /* ImageLoader.swift */,
 				BE95FBCE2529724C00B84D40 /* CueParser.swift */,
+				BE349D49253E2E7000655BA5 /* const.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -244,6 +253,7 @@
 		BEB74C202508797B0035FEC1 = {
 			isa = PBXGroup;
 			children = (
+				BE349D18253E087F00655BA5 /* SidePlayWidgetExtension.entitlements */,
 				BEB74C2B2508797B0035FEC1 /* SidePlay */,
 				BEB74C422508797C0035FEC1 /* SidePlayTests */,
 				BEB74C4D2508797C0035FEC1 /* SidePlayUITests */,
@@ -273,7 +283,6 @@
 				BE9C711F250D2FEB0053FBB7 /* Navigation */,
 				BE9C7120250D30040053FBB7 /* SwiftCoordinators */,
 				BE9C7121250D30310053FBB7 /* SupportingViews */,
-				BEBD8212253BE3E3003FB72B /* Widgets */,
 				BED752C225096BD900C79F76 /* SidePlay.entitlements */,
 				BEB74C302508797C0035FEC1 /* Assets.xcassets */,
 				BEB74C352508797C0035FEC1 /* Persistence.swift */,
@@ -318,15 +327,6 @@
 				BEBD8207253BE264003FB72B /* Info.plist */,
 			);
 			path = SidePlayWidget;
-			sourceTree = "<group>";
-		};
-		BEBD8212253BE3E3003FB72B /* Widgets */ = {
-			isa = PBXGroup;
-			children = (
-				BEBD8213253BE40E003FB72B /* NowPlayingWidgetContents.swift */,
-				BEBD821E253BE612003FB72B /* NowPlayingWidgetView.swift */,
-			);
-			path = Widgets;
 			sourceTree = "<group>";
 		};
 		BED752C325096BE800C79F76 /* Frameworks */ = {
@@ -488,6 +488,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE349D71253E3E2A00655BA5 /* Assets.xcassets in Resources */,
 				BEBD8206253BE264003FB72B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -504,10 +505,10 @@
 				BE0FE12E250E9B5E00C9B7D8 /* ImportCard.swift in Sources */,
 				BEB74C392508797C0035FEC1 /* SidePlay.xcdatamodeld in Sources */,
 				BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */,
-				BEBD8214253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */,
 				BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */,
 				BEB65F772522A45B009CC379 /* AsyncImage.swift in Sources */,
 				BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */,
+				BE349D4A253E2E7000655BA5 /* const.swift in Sources */,
 				BE3A804B2509D4C700C489DD /* Track+CoreDataClass.swift in Sources */,
 				BE3A804E2509D96500C489DD /* PlayerView.swift in Sources */,
 				BE3A804C2509D4C700C489DD /* Track+CoreDataProperties.swift in Sources */,
@@ -527,7 +528,6 @@
 				BEABDD15251DAA85003E77DF /* RecentlyPlayedCard.swift in Sources */,
 				BEB74C2F2508797B0035FEC1 /* ContentView.swift in Sources */,
 				BEE3D2002519AB8E0040D8F7 /* TrackListRowView.swift in Sources */,
-				BEBD821F253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */,
 				BEB74C5D250879DC0035FEC1 /* DocumentPicker.swift in Sources */,
 				BEBD81B4253BDE1D003FB72B /* NewPlaylistCard.swift in Sources */,
 				BEB74C2D2508797B0035FEC1 /* SidePlayApp.swift in Sources */,
@@ -554,9 +554,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEBD8220253BE612003FB72B /* NowPlayingWidgetView.swift in Sources */,
+				BE349D2E253E1D0300655BA5 /* SidePlay.xcdatamodeld in Sources */,
+				BE349D6C253E3DF200655BA5 /* Extensions.swift in Sources */,
 				BEBD8204253BE263003FB72B /* SidePlayWidget.swift in Sources */,
-				BEBD8215253BE40E003FB72B /* NowPlayingWidgetContents.swift in Sources */,
+				BE349D33253E1D4E00655BA5 /* Track+CoreDataProperties.swift in Sources */,
+				BE349D44253E280700655BA5 /* Persistence.swift in Sources */,
+				BE349D34253E1D4E00655BA5 /* Playlist+CoreDataProperties.swift in Sources */,
+				BE349D4F253E2EDF00655BA5 /* const.swift in Sources */,
+				BE349D35253E1D4E00655BA5 /* Playlist+CoreDataClass.swift in Sources */,
+				BE349D36253E1D4E00655BA5 /* Track+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +840,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SidePlayWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				INFOPLIST_FILE = SidePlayWidget/Info.plist;
@@ -855,6 +862,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SidePlayWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				INFOPLIST_FILE = SidePlayWidget/Info.plist;
