@@ -33,6 +33,9 @@ struct NewPlaylistCard: View {
                             newPlaylist.favorite = false
                             
                             self.showAddPlayist = false
+                            if audioHandler.isPlaying {
+                                audioHandler.isShowingPlayer = true
+                            }
                             
                             do {
                                 try viewContext.save()
@@ -47,6 +50,9 @@ struct NewPlaylistCard: View {
                         .padding(.bottom, 5)
                     Button(action: {
                         showAddPlayist.toggle()
+                        if audioHandler.isPlaying {
+                            audioHandler.isShowingPlayer = true
+                        }
                     }, label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.body)

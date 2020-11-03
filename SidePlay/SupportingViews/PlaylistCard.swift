@@ -46,7 +46,9 @@ struct PlaylistCard: View {
                                     playlist.name = newPlaylistName
 
                                     self.showAddPlayist = false
-                                    
+                                    if audioHandler.isPlaying {
+                                        audioHandler.isShowingPlayer = true
+                                    }
                                     do {
                                         try viewContext.save()
                                     } catch {
@@ -81,6 +83,9 @@ struct PlaylistCard: View {
                                     
                                     self.showAddPlayist = false
                                     
+                                    if audioHandler.isPlaying {
+                                        audioHandler.isShowingPlayer = true
+                                    }
                                     do {
                                         try viewContext.save()
                                     } catch {
@@ -94,6 +99,10 @@ struct PlaylistCard: View {
                                 .padding(.bottom, 5)
                             Button(action: {
                                 showAddPlayist.toggle()
+                                
+                                if audioHandler.isPlaying {
+                                    audioHandler.isShowingPlayer = true
+                                }
                             }, label: {
                                 Image(systemName: "xmark.circle.fill")
                                     .font(.body)
