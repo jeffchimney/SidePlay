@@ -33,6 +33,13 @@ struct FullPlayerView: View {
                     .environmentObject(audioHandler)
                     .frame(width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.width - 40, alignment: .center)
                 
+                HStack {
+                    Spacer()
+                    Text("\(audioHandler.playlist?.wrappedName ?? "") \(audioHandler.playlist!.trackArray.firstIndex(of: audioHandler.currentlyPlayingTrack!)! + 1)/\(audioHandler.playlist!.trackArray.count)")
+                        .font(.footnote)
+                    Spacer()
+                }
+                
                 Slider(value: $seekPosition, in: 0...1) { (test) in
                     audioHandler.audioPlayer.currentTime = TimeInterval(seekPosition * audioHandler.audioPlayer.duration)
                     MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = audioHandler.audioPlayer.currentTime

@@ -11,24 +11,25 @@ struct TrackListView: View {
     
     @EnvironmentObject var audioHandler: AudioHandler
     
-    var playlist: Playlist
-    
     @State private var counter: Int = 1
     
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
-                ForEach(0..<playlist.trackArray.count) { i in
-                //ForEach(playlist.trackArray) { track in
-                    Button {
-                        audioHandler.playTrack(track: playlist.trackArray[i])
-                    } label: {
-                        makeRowView(track: playlist.trackArray[i], counter: i)
-                            .padding(5)
+                if audioHandler.currentlyPlayingTrack != nil {
+                    ForEach(0..<audioHandler.currentlyPlayingTrack!.playlist!.trackArray.count) { i in
+                    //ForEach(playlist.trackArray) { track in
+                        Button {
+                            audioHandler.playTrack(track: audioHandler.currentlyPlayingTrack!.playlist!.trackArray[i])
+                        } label: {
+                            makeRowView(counter: i)
+                                .environmentObject(audioHandler)
+                                .padding(5)
+                        }
+                        .padding([.leading, .trailing], 5)
+                        .foregroundColor(Color.elementColor)
+                        Divider()
                     }
-                    .padding([.leading, .trailing], 5)
-                    .foregroundColor(Color.elementColor)
-                    Divider()
                 }
             }
             .padding()
@@ -39,13 +40,13 @@ struct TrackListView: View {
         .padding()
     }
 
-    func makeRowView(track: Track, counter: Int) -> TrackListRowView {
-        return TrackListRowView(track: track, trackNumber: counter, nowPlayingTrackID: audioHandler.currentlyPlayingTrack!.objectID)
+    func makeRowView(counter: Int) -> TrackListRowView {
+        return TrackListRowView(trackNumber: counter)
     }
 }
 
 struct TrackListView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackListView(playlist: Playlist())
+        TrackListView()
     }
 }

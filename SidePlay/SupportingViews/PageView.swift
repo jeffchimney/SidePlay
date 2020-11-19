@@ -28,7 +28,9 @@ struct PageView: View {
                     .padding()
             }
             
-            TrackListView(playlist: audioHandler.currentlyPlayingTrack!.playlist!)
+            // MARK: This is crashing after changing tracks when locked.... sometimes.
+            //TrackListView()
+            //    .environmentObject(audioHandler)
         }
         .tabViewStyle(PageTabViewStyle())
     }

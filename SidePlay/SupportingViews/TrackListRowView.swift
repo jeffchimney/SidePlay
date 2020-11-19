@@ -14,18 +14,16 @@ struct TrackListRowView: View {
     
     @State private var phase = 0.0
     
-    var track: Track
     var trackNumber: Int
-    var nowPlayingTrackID: NSManagedObjectID
     
     var body: some View {
         HStack {
             Text("\(trackNumber + 1). ")
                 .font(.footnote)
-            Text(track.name!)
+            Text(audioHandler.currentlyPlayingTrack!.playlist!.trackArray[trackNumber].name!)
                 .font(.footnote)
             // if the track has been played and it isnt the currently playing track, add a played checkmark
-            if track.played && track.objectID != nowPlayingTrackID {
+            if audioHandler.currentlyPlayingTrack!.playlist!.trackArray[trackNumber].played && audioHandler.currentlyPlayingTrack!.playlist!.trackArray[trackNumber].objectID != audioHandler.currentlyPlayingTrack?.objectID {
                 Spacer()
                 ZStack {
                     LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
@@ -39,7 +37,7 @@ struct TrackListRowView: View {
             }
             
             //if the track is currently playing, show now playing animation
-            if track.objectID == nowPlayingTrackID {
+            if audioHandler.currentlyPlayingTrack!.playlist!.trackArray[trackNumber].objectID == audioHandler.currentlyPlayingTrack?.objectID {
                 Spacer()
                 LinearGradient(gradient: Gradient(colors: [.clear, .buttonGradientStart, .buttonGradientStart, .buttonGradientEnd, .buttonGradientEnd, .clear]), startPoint: .leading, endPoint: .trailing)
                     .mask(
@@ -71,6 +69,6 @@ struct TrackListRowView: View {
 
 struct TrackListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TrackListRowView(track: Track(), trackNumber: 1, nowPlayingTrackID: NSManagedObjectID())
+        TrackListRowView(trackNumber: 1)
     }
 }

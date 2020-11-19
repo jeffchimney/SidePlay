@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FloatingMenu: View {
     
+    @EnvironmentObject var audioHandler: AudioHandler
+    
     @State private var showMenuItem1 = false
     @State private var showMenuItem2 = false
     @State private var rotation = 0.0
@@ -45,6 +47,7 @@ struct FloatingMenu: View {
                 if showMenuItem2 && addButtonShouldExpand {
                     Button {
                         withAnimation(.easeInOut) {
+                            audioHandler.isShowingPlayer = false
                             showAddPlaylist = true
                             showMenuItem1 = false
                             rotation = 0

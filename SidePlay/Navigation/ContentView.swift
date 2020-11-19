@@ -127,7 +127,8 @@ struct ContentView: View {
                 
                 if !showAddPlayist {
                     FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist, addButtonShouldExpand: true)
-                    .zIndex(1)
+                        .environmentObject(audioHandler)
+                        .zIndex(1)
                 }
             }
             // Nav Bar Config
