@@ -26,6 +26,7 @@ struct FloatingMenu: View {
                 Spacer()
                 if showMenuItem1 && addButtonShouldExpand {
                     Button {
+                        generateHaptic()
                         showFilePicker = true
                         showMenuItem1 = false
                         showMenuItem2 = false
@@ -46,6 +47,7 @@ struct FloatingMenu: View {
                 
                 if showMenuItem2 && addButtonShouldExpand {
                     Button {
+                        generateHaptic()
                         withAnimation(.easeInOut) {
                             audioHandler.isShowingPlayer = false
                             showAddPlaylist = true
@@ -72,6 +74,7 @@ struct FloatingMenu: View {
                     .transition(.move(edge: .trailing))
                 }
                 Button {
+                    generateHaptic()
                     if addButtonShouldExpand {
                         if !showMenuItem1 {
                             withAnimation(.easeInOut) {

@@ -18,6 +18,7 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     var playlist: Playlist?
     var viewContext: NSManagedObjectContext?
     var timer: Timer?
+    var remoteControlsSetUp = false
 
     override init() {
         super.init()
@@ -119,7 +120,10 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func setupNowPlaying() {
-        setupRemoteTransportControls()
+        if !remoteControlsSetUp {
+            remoteControlsSetUp = true
+            setupRemoteTransportControls()
+        }
         // Define Now Playing Info
         var nowPlayingInfo = [String : Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = currentlyPlayingTrack?.wrappedName

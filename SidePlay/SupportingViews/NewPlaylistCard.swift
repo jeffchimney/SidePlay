@@ -49,6 +49,7 @@ struct NewPlaylistCard: View {
                         .autocapitalization(UITextAutocapitalizationType.words)
                         .padding(.bottom, 5)
                     Button(action: {
+                        generateWarningHaptic()
                         showAddPlayist.toggle()
                         if audioHandler.isPlaying {
                             audioHandler.isShowingPlayer = true

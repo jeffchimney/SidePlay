@@ -210,10 +210,13 @@ struct PlaylistView: View {
                                         counter += 1
                                         
                                         DispatchQueue.main.async {
+                                            if counter == 40 {
+                                                print("test")
+                                            }
                                             print("Downloaded \(counter)")
                                             withAnimation {
                                                 self.isDownloading = true
-                                                self.downloadProgress = counter-1
+                                                self.downloadProgress = counter
                                                 self.percentDownloaded = Double(self.downloadProgress) / Double(downloadTotal)
                                                 
                                                 if self.downloadProgress >= self.downloadTotal {
