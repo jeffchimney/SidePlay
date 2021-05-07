@@ -27,7 +27,7 @@ struct SidePlayApp: App {
                     .environmentObject(audioHandler)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 
-                if audioHandler.isShowingPlayer {
+                if audioHandler.isShowingPlayer && UIDevice.current.userInterfaceIdiom != .pad {
                     VStack {
                         Divider()
                         PlayerView()

@@ -48,7 +48,7 @@ struct PlayerView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            self.showFullPlayer.toggle()
+            self.showFullPlayer = (UIDevice.current.userInterfaceIdiom == .phone)
         }
         .sheet(isPresented: $showFullPlayer, onDismiss: {
             self.showFullPlayer = false

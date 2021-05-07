@@ -1,28 +1,48 @@
 //
-//  PlaylistView.swift
+//  ContentView.swift
 //  SidePlay
 //
-//  Created by Jeff Chimney on 2020-09-09.
+//  Created by Jeff Chimney on 2020-09-08.
 //
 
 import SwiftUI
+import CoreData
 import AVKit
 
-struct PlaylistView: View {
+struct LibraryView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var audioHandler: AudioHandler
     
     @State private var showFilePicker = false
+    @State private var showAddPlayist = false
     @State private var isDownloading: Bool = false
     @State private var downloadProgress: Int = 0
     @State private var downloadTotal: Int = 10
     @State private var percentDownloaded: Double = 0.0
     
-    @Binding var playlist: Playlist?
+    @Binding var selectedPlaylist: Playlist?
+
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Playlist.name, ascending: true)
+        ],
+        animation: .default)
+    private var playlists: FetchedResults<Playlist>
     
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Playlist.lastPlayed, ascending: false)
+        ],
+        predicate: NSPredicate(format: "lastPlayed >= %@ and favorite == true", NSDate().addingTimeInterval(-604800)), // last played at least one week ago
+        animation: .default)
+    private var recentlyPlayed: FetchedResults<Playlist>
+    
+    var callbackURLs: [URL] = []
+
     var body: some View {
         ZStack {
-            VStack {
+            ScrollView {
                 if isDownloading {
                     GeometryReader { geometry in
                         VStack {
@@ -53,101 +73,112 @@ struct PlaylistView: View {
                     .frame(height: 25)
                     .padding()
                 }
-                if playlist!.trackArray.count > 0 {
-                    if UIDevice.current.userInterfaceIdiom == .phone {
-                        Button {
-                            withAnimation {
-                                audioHandler.isShowingPlayer = true
-                            }
-                            audioHandler.playlist = playlist
-                            audioHandler.playFromWhereWeLeftOff()
-                        } label: {
-                            HStack {
-                                ZStack(alignment: .center) {
-                                    LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
-                                        .frame(height: 30)
-                                        .clipShape(Capsule())
-                                    Text("  Resume  ")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                }
+                LazyVStack {
+                    if recentlyPlayed.count > 0 {
+                        HStack {
+                            Text("Keep Listening")
+                                .font(.title)
+                                .padding([.leading, .trailing, .top])
                                 Spacer()
-                            }
-                            .padding(10)
-                        }
-                    } else {
-                        Button {
-                            audioHandler.playlist = playlist
-                            audioHandler.playFromWhereWeLeftOff()
-                        } label: {
-                            HStack {
-                                ZStack(alignment: .center) {
-                                    LinearGradient(gradient: Gradient(colors: [.buttonGradientStart, .buttonGradientEnd]), startPoint: .leading, endPoint: .trailing)
-                                        .frame(height: 30)
-                                        .clipShape(Capsule())
-                                    Text("  Resume  ")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                }
-                                Spacer()
-                            }
-                            .padding(10)
                         }
                     }
-                }
-                
-                List {
-                    ForEach(playlist!.trackArray) { track in
-                        if const.isIPad() {
-                            Button {
-                                audioHandler.playlist = playlist
-                                audioHandler.playTrack(track: track)
-                            } label: {
-                                Text(track.name!)
-                            }
-                        } else {
-                            Button {
-                                withAnimation {
-                                    audioHandler.isShowingPlayer = true
+                    ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .top) {
+                                ForEach(recentlyPlayed) { recentPlaylist in
+                                    if const.isIPad() {
+                                        Button {
+                                            audioHandler.playlist = recentPlaylist
+                                            audioHandler.playFromWhereWeLeftOff()
+                                            selectedPlaylist = recentPlaylist
+                                        } label: {
+                                            RecentlyPlayedCard(playlist: recentPlaylist)
+                                                .environment(\.managedObjectContext, viewContext)
+                                        }
+                                    } else {
+                                        Button {
+                                            withAnimation {
+                                                audioHandler.isShowingPlayer = true
+                                            }
+                                            audioHandler.playlist = recentPlaylist
+                                            audioHandler.playFromWhereWeLeftOff()
+                                        } label: {
+                                            RecentlyPlayedCard(playlist: recentPlaylist)
+                                                .environment(\.managedObjectContext, viewContext)
+                                        }
+                                    }
                                 }
-                                audioHandler.playlist = playlist
-                                audioHandler.playTrack(track: track)
-                            } label: {
-                                Text(track.name!)
+                                    .padding([.leading, .trailing], 10)
                             }
-                        }
                     }
+                    .padding(.top)
+
+                    HStack {
+                        Text("Playlists")
+                            .font(.title)
+                            .padding([.leading, .trailing, .top])
+                            Spacer()
+                    }
+                    if showAddPlayist {
+                        NewPlaylistCard(playlist: Playlist(), showAddPlayist: $showAddPlayist)
+                            .environment(\.managedObjectContext, viewContext)
+                            .environmentObject(audioHandler)
+                            .padding([.leading, .trailing, .top])
+                    }
+                    ForEach(playlists) { playlist in
+                        SwipableCardWithButtons(playlist: playlist, showAddPlayist: $showAddPlayist)
+                            .environment(\.managedObjectContext, viewContext)
+                            .environmentObject(audioHandler)
+                            .padding([.leading, .trailing, .top])
+                    }
+
                 }
-                .id(UUID())
+                .listStyle(PlainListStyle())
             }
+            .animation(.easeInOut)
             .zIndex(0)
             
-//            FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: .constant(false), addButtonShouldExpand: false)
-//                .zIndex(1)
+//                if !showAddPlayist {
+//                    FloatingMenu(showFilePicker: $showFilePicker, showAddPlaylist: $showAddPlayist, addButtonShouldExpand: true)
+//                        .environmentObject(audioHandler)
+//                        .zIndex(1)
+//                }
         }
         // Nav Bar Config
-        .navigationBarTitle(playlist!.wrappedName)
+        .navigationBarTitle("Library")
         .navigationBarItems(trailing:
-            Button(action: {
-                generateHaptic()
-                showFilePicker = true
-            }, label: {
-                Text("Import")
-            })
+            Menu("Add") {
+                Button(action: {
+                    generateHaptic()
+                    withAnimation(.easeInOut) {
+                        audioHandler.isShowingPlayer = false
+                        self.showAddPlayist = true
+                    }
+                }, label: {
+                    Text("New Playlist")
+                    Image(systemName: "music.note.list")
+                })
+                Button(action: {
+                    generateHaptic()
+                    showFilePicker = true
+                }, label: {
+                    Text("Import")
+                    Image(systemName: "square.and.arrow.down")
+                })
+            }
         )
         // Import Config
         .sheet(isPresented: $showFilePicker, onDismiss: {
             self.showFilePicker = false
         }) {
             DocumentPicker { (urls) in
-                addTracksTo(playlist: playlist!, urls: urls)
+                addTracks(urls: urls)
             } onDismiss: {
                 self.showFilePicker = false
             }
         }
     }
-    
-    func addTracksTo(playlist: Playlist, urls: [URL]) {
+
+    func addTracks(urls: [URL]) {
         let sortedUrls = urls.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
         withAnimation {
             var imageLastPathComponent = ""
@@ -180,8 +211,9 @@ struct PlaylistView: View {
                 }
             }
             
-            // handle mp3s
-            var counter = 0
+            // create new playlist to load import into
+            let newPlaylist = createNewPlaylist(counter: 0, imageLastPathComponent: imageLastPathComponent)
+            var counter = 1
             for url in sortedUrls {
                 let pathExtension = url.pathExtension
                 
@@ -234,7 +266,7 @@ struct PlaylistView: View {
                                     default:
                                         let newTrack = Track(context: viewContext)
                                         newTrack.name = chapter.title
-                                        newTrack.playlist = playlist
+                                        newTrack.playlist = newPlaylist
                                         newTrack.progress = 0
                                         newTrack.sortOrder = Int64(counter)
                                         newTrack.url = destinationUrl
@@ -246,15 +278,13 @@ struct PlaylistView: View {
                                             newTrack.playlist?.imageLastPathComponent = imageLastPathComponent
                                         }
                                         
-                                        playlist.addToTracks(newTrack)
                                         counter += 1
                                         
                                         DispatchQueue.main.async {
                                             print("Downloaded \(counter)")
                                             withAnimation {
                                                 self.isDownloading = true
-                                                self.downloadProgress = counter
-                                                
+                                                self.downloadProgress = counter-1
                                                 self.percentDownloaded = Double(self.downloadProgress) / Double(downloadTotal)
                                                 
                                                 if self.downloadProgress >= self.downloadTotal {
@@ -275,6 +305,15 @@ struct PlaylistView: View {
                                 }
                             })
                         }
+                        
+                        // delete full track after splitting into pieces
+                        do {
+                            // after downloading your file you need to move it to your destination url
+                            try FileManager.default.removeItem(at: fullFileDestinationUrl)
+                            print("Full file deleted from storage")
+                        } catch let error as NSError {
+                            print(error.localizedDescription)
+                        }
                     } else {
                         self.downloadTotal = sortedUrls.count
                         self.downloadProgress = counter
@@ -286,7 +325,6 @@ struct PlaylistView: View {
                         let uuid = UUID()
                         let destinationUrl = documentsDirectoryURL.appendingPathComponent(uuid.uuidString)
                         print(uuid.uuidString)
-
                         do {
                             // after downloading your file you need to move it to your destination url
                             try FileManager.default.moveItem(at: url, to: destinationUrl)
@@ -297,10 +335,11 @@ struct PlaylistView: View {
                         
                         let newTrack = Track(context: viewContext)
                         newTrack.name = url.lastPathComponent
-                        newTrack.playlist = playlist
+                        newTrack.playlist = newPlaylist
                         newTrack.progress = 0
                         newTrack.sortOrder = Int64(counter)
                         newTrack.url = destinationUrl
+                        print(destinationUrl)
                         newTrack.isPlaying = false
                         newTrack.played = false
                         newTrack.uuid = uuid
@@ -308,27 +347,91 @@ struct PlaylistView: View {
                         if imageLastPathComponent != "" {
                             newTrack.playlist?.imageLastPathComponent = imageLastPathComponent
                         }
-                        
-                        playlist.addToTracks(newTrack)
+
                         counter += 1
                         
-                        do {
-                            try viewContext.save()
-                        } catch {
-                            // Replace this implementation with code to handle the error appropriately.
-                            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                            let nsError = error as NSError
-                            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                        DispatchQueue.main.async {
+                            print("Downloaded \(counter)")
+                            withAnimation {
+                                self.isDownloading = true
+                                self.downloadProgress = counter
+                                self.percentDownloaded = Double(self.downloadProgress) / Double(downloadTotal)
+                                
+                                if self.downloadProgress >= self.downloadTotal {
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    self.isDownloading = false
+                                }
+                            }
+                            do {
+                                try viewContext.save()
+                            } catch {
+                                // Replace this implementation with code to handle the error appropriately.
+                                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                                let nsError = error as NSError
+                                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                            }
                         }
                     }
                 }
             }
         }
     }
+    
+    func createNewPlaylist(counter: Int, imageLastPathComponent: String) -> Playlist {
+        do {
+            var newPlaylist: Playlist
+            let unsortedPlaylistFetchRequest : NSFetchRequest<Playlist> = Playlist.fetchRequest()
+            unsortedPlaylistFetchRequest.predicate = NSPredicate(format: "name == %@", counter > 0 ? "New Playlist \(counter)" : "New Playlist")
+            let fetchedResults = try viewContext.fetch(unsortedPlaylistFetchRequest)
+            if fetchedResults.count > 0 {
+                return createNewPlaylist(counter: counter + 1, imageLastPathComponent: imageLastPathComponent)
+            } else {
+                newPlaylist = Playlist(context: viewContext)
+                newPlaylist.name = counter > 0 ? "New Playlist \(counter)" : "New Playlist"
+                newPlaylist.imageLastPathComponent = imageLastPathComponent
+                
+                return newPlaylist
+            }
+        }
+        catch { print("Error \(error)") }
+        return Playlist()
+    }
+
+    func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { playlists[$0] }.forEach(viewContext.delete)
+
+            do {
+                try viewContext.save()
+            } catch {
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
 }
 
-struct PlaylistView_Previews: PreviewProvider {
+struct LibraryView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(playlist: .constant(Playlist()))
+        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
+
+struct PlaylistHeader: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "music.note.list")
+            Text("Playlists")
+        }
+    }
+}
+
+struct FavoritePlaylistHeader: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "star")
+            Text("Favorites")
+        }
     }
 }

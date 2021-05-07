@@ -29,22 +29,38 @@ struct SwipableCardWithButtons: View {
             // Play  / edit delete playlist buttons under playlist card
             HStack {
                 // play button to continue listening to playlist
-                Button(action: {
-                    // play
-                    withAnimation {
-                        audioHandler.isShowingPlayer = true
-                    }
-                    audioHandler.playlist = playlist
-                    audioHandler.playFromWhereWeLeftOff()
-                }, label: {
-                    Image(systemName: "play.circle.fill")
-                        .imageScale(.medium)
-                        .font(.headline)
-                        .foregroundColor(.buttonGradientEnd)
-                })
-                .opacity(offsetDirection == .right ? 1 : 0)
-                .transition(.move(edge: .leading))
-                .padding()
+                if const.isIPad() {
+                    Button(action: {
+                        // play
+                        audioHandler.playlist = playlist
+                        audioHandler.playFromWhereWeLeftOff()
+                    }, label: {
+                        Image(systemName: "play.circle.fill")
+                            .imageScale(.medium)
+                            .font(.headline)
+                            .foregroundColor(.buttonGradientEnd)
+                    })
+                    .opacity(offsetDirection == .right ? 1 : 0)
+                    .transition(.move(edge: .leading))
+                    .padding()
+                } else {
+                    Button(action: {
+                        // play
+                        withAnimation {
+                            audioHandler.isShowingPlayer = true
+                        }
+                        audioHandler.playlist = playlist
+                        audioHandler.playFromWhereWeLeftOff()
+                    }, label: {
+                        Image(systemName: "play.circle.fill")
+                            .imageScale(.medium)
+                            .font(.headline)
+                            .foregroundColor(.buttonGradientEnd)
+                    })
+                    .opacity(offsetDirection == .right ? 1 : 0)
+                    .transition(.move(edge: .leading))
+                    .padding()
+                }
                 
                 Spacer()
                 

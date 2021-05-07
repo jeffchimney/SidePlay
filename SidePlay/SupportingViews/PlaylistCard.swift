@@ -12,7 +12,7 @@ struct PlaylistCard: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var audioHandler: AudioHandler
     
-    var playlist: Playlist
+    @State var playlist: Playlist?
     var isEditing: Bool = false
     @State private var newPlaylistName: String = ""
     
@@ -23,12 +23,12 @@ struct PlaylistCard: View {
         // Playlist Card
         NavigationLink(
             destination:
-                PlaylistView(playlist: playlist)
+                PlaylistView(playlist: $playlist)
                     .environment(\.managedObjectContext, viewContext)
                     .environmentObject(audioHandler)) {
             HStack {
                 if !isEditing {
-                    AsyncImage(imageLastPathComponent: playlist.wrappedImageLastPathComponent)
+                    AsyncImage(imageLastPathComponent: playlist!.wrappedImageLastPathComponent)
                         .frame(width: 60, height: 60, alignment: .center)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                     
@@ -41,9 +41,9 @@ struct PlaylistCard: View {
                 VStack(alignment: .leading) {
                     if !isEditing {
                         if isEditingExistingPlaylist {
-                            TextField(playlist.wrappedName, text: $newPlaylistName) { (result) in }
+                            TextField(playlist!.wrappedName, text: $newPlaylistName) { (result) in }
                                 onCommit: {
-                                    playlist.name = newPlaylistName
+                                    playlist!.name = newPlaylistName
 
                                     self.showAddPlayist = false
                                     if audioHandler.isPlaying {
@@ -62,14 +62,14 @@ struct PlaylistCard: View {
                                 .autocapitalization(UITextAutocapitalizationType.words)
                                 .padding(.bottom, 5)
                         } else {
-                            Text(playlist.wrappedName)
+                            Text(playlist!.wrappedName)
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .lineLimit(2)
                                 .padding(.bottom, 5)
                                 .foregroundColor(.primary)
                         }
-                        Text("Contains \(playlist.trackArray.count) items".uppercased())
+                        Text("Contains \(playlist!.trackArray.count) items".uppercased())
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {

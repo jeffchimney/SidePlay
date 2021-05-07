@@ -31,6 +31,7 @@
 		BE3A804C2509D4C700C489DD /* Track+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A80482509D4C700C489DD /* Track+CoreDataProperties.swift */; };
 		BE3A804E2509D96500C489DD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A804D2509D96500C489DD /* PlayerView.swift */; };
 		BE3A80502509DBBD00C489DD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A804F2509DBBD00C489DD /* Extensions.swift */; };
+		BE3C5CBD2644FF6700B7BD2A /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3C5CBC2644FF6700B7BD2A /* LibraryView.swift */; };
 		BE41AF022521A4A600D73F62 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE41AF012521A4A600D73F62 /* Wave.swift */; };
 		BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7ECD3B250C146900B3E618 /* AudioHandler.swift */; };
 		BE95FBCF2529724C00B84D40 /* CueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE95FBCE2529724C00B84D40 /* CueParser.swift */; };
@@ -115,6 +116,7 @@
 		BE3A80482509D4C700C489DD /* Track+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Track+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BE3A804D2509D96500C489DD /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		BE3A804F2509DBBD00C489DD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		BE3C5CBC2644FF6700B7BD2A /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		BE41AF012521A4A600D73F62 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		BE7ECD3B250C146900B3E618 /* AudioHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHandler.swift; sourceTree = "<group>"; };
 		BE95FBCE2529724C00B84D40 /* CueParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CueParser.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				BEB74C2E2508797B0035FEC1 /* ContentView.swift */,
+				BE3C5CBC2644FF6700B7BD2A /* LibraryView.swift */,
 				BE3A80422509D1D900C489DD /* PlaylistView.swift */,
 				BE3A804D2509D96500C489DD /* PlayerView.swift */,
 				BED4AEDD251875B000EEC5DE /* FullPlayerView.swift */,
@@ -510,6 +513,7 @@
 				BEE3D1FE251946640040D8F7 /* TrackListView.swift in Sources */,
 				BE7ECD3C250C146900B3E618 /* AudioHandler.swift in Sources */,
 				BEB65F772522A45B009CC379 /* AsyncImage.swift in Sources */,
+				BE3C5CBD2644FF6700B7BD2A /* LibraryView.swift in Sources */,
 				BED4AEDE251875B000EEC5DE /* FullPlayerView.swift in Sources */,
 				BE349D4A253E2E7000655BA5 /* const.swift in Sources */,
 				BE3A804B2509D4C700C489DD /* Track+CoreDataClass.swift in Sources */,
@@ -715,7 +719,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SidePlay/SidePlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SidePlay/Preview Content\"";
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				ENABLE_PREVIEWS = YES;
@@ -727,6 +731,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -740,7 +745,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SidePlay/SidePlay.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"SidePlay/Preview Content\"";
 				DEVELOPMENT_TEAM = JSZY8AYXNH;
 				ENABLE_PREVIEWS = YES;
@@ -752,6 +757,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -858,6 +864,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay.SidePlayWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -880,6 +887,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Chimney.SidePlay.SidePlayWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -189,10 +189,20 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 // if we are caught up to the track we just played, and it hasnt yet been played
                 if track.uuid == unwrappedPlaylist.lastPlayedTrack {
                     playTrack(track: track)
-                    break
                 }
             }
         }
+    }
+    
+    func getMostRecentlyPlayedTrackIn(playlist: Playlist) -> Track? {
+        let sortedPlaylist = playlist.trackArray.sorted(by: { $0.sortOrder < $1.sortOrder })
+        for track in sortedPlaylist {
+            // if we are caught up to the track we just played, and it hasnt yet been played
+            if track.uuid == playlist.lastPlayedTrack {
+                return track
+            }
+        }
+        return nil
     }
     
     func playTrack(track: Track) {
@@ -214,12 +224,19 @@ class AudioHandler: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 URLSession.shared.downloadTask(with: calculatedAudioURL, completionHandler: { (location, response, error) -> Void in
                     guard let location = location, error == nil else { return }
                     do {
-                        try self.audioPlayer = AVAudioPlayer(contentsOf: location)
+                        print(location)
+                        if track.wrappedName.contains("mp3") == true {
+                            try self.audioPlayer = AVAudioPlayer(contentsOf: location, fileTypeHint: AVFileType.mp3.rawValue)
+                        } else {
+                            try self.audioPlayer = AVAudioPlayer(contentsOf: location)
+                        }
                         self.audioPlayer.delegate = self
                         self.audioPlayer.currentTime = track.progress
                         self.audioPlayer.play()
                         self.setupNowPlaying()
-                    } catch { print("Error \(error)") }
+                    } catch {
+                        print("Error \(error)")
+                    }
 
                 }).resume()
                 
